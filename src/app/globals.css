@@ -14,7 +14,7 @@
     --color-borderBox:#BFC9C1;
     --color-darkgreen:#566342;
     --color-bgchip:#DAE8BE;
-    --color-text-claro: #f1f1f1;
+    --color-text-claro: #000000;
     --color-bg-claro:#ffffff;
     --color-bg-oscuro:#1C1C1C;
 }
@@ -24,6 +24,15 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Paleta personalizada para Tailwind */
+  --color-primary: var(--color-primario);
+  --color-primary-dark: #0a3d2a;
+  --color-secondary: var(--color-secundario);
+  --color-accent: var(--color-acento);
+  --color-danger: var(--color-danger);
+  --color-text-main: var(--color-texto);
+  --color-text-muted: #7a8a7c;
 }
 
 @media (prefers-color-scheme: dark) {
