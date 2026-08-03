@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MiHuerto from "@/components/planifica-huerto/ContenedorWizardHuerto";
 
 export default function Home() {
   return (
@@ -23,7 +24,8 @@ export default function Home() {
           </Link>
         </div>
       </section>
-
+      <MiHuerto />
+      
       {/* Features */}
       <section className="mt-20 grid gap-6 sm:grid-cols-3 max-w-4xl w-full">
         <FeatureCard
@@ -67,3 +69,4 @@ function FeatureCard({
     </div>
   );
 }
+

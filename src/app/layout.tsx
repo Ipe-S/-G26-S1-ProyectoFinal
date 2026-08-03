@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
-import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 const geistSans = Geist({
@@ -16,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: `${process.env.NEXT_PUBLIC_NOMBRE_PROYECTO || "Küme Rayentwe"} — Huerto Sustentable`,
+  title: `${process.env.NEXT_PUBLIC_NOMBRE_PROYECTO || "Mi Huerto"} — Huerto Sustentable`,
   description:
-    "Aplicación ciudadana para incentivar y gestionar proyectos de huertos domiciliarios en Puente Alto.",
+    "Aplicación ciudadana para incentivar y gestionar proyectos de huertos sustentables.",
 };
 
 export default function RootLayout({
@@ -33,7 +32,6 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Navbar />
-        <Header />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

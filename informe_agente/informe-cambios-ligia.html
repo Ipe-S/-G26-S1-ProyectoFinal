@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informe de Cambios — Rama ligia-branch</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 40px 50px;
+      background: #fff;
+    }
+    @media print {
+      body { padding: 20px 40px; }
+      .page-break { page-break-before: always; }
+    }
+    .cover {
+      text-align: center;
+      padding: 60px 0;
+      border-bottom: 3px solid #0F5238;
+      margin-bottom: 40px;
+    }
+    .cover h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #0F5238;
+      margin-bottom: 8px;
+    }
+    .cover .subtitle {
+      font-size: 1.1rem;
+      color: #52525b;
+      margin-bottom: 30px;
+    }
+    .cover .meta {
+      font-size: 0.9rem;
+      color: #71717a;
+    }
+    .cover .meta p { margin: 4px 0; }
+    .badge-branch {
+      display: inline-block;
+      background: #bee3d5;
+      color: #0F5238;
+      font-family: monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #0F5238;
+      margin-top: 40px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #bee3d5;
+    }
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #27272a;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    p { margin-bottom: 12px; color: #3f3f46; }
+    ul, ol { margin-bottom: 16px; padding-left: 24px; }
+    li { margin-bottom: 6px; color: #3f3f46; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.88rem;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid #e4e4e7;
+    }
+    th {
+      background: #f4f4f5;
+      font-weight: 600;
+      color: #18181b;
+    }
+    code {
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.83rem;
+      background: #f4f4f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #0F5238;
+    }
+    .code-block {
+      background: #f9fafb;
+      border: 1px solid #e4e4e7;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: 'Cascadia Code', Consolas, monospace;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      overflow-x: auto;
+      margin: 12px 0;
+      color: #27272a;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .stat-card {
+      background: #f4f4f5;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      border-top: 3px solid #0F5238;
+    }
+    .stat-card .number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0F5238;
+    }
+    .stat-card .label {
+      font-size: 0.8rem;
+      color: #71717a;
+      margin-top: 4px;
+    }
+    .section-icon {
+      display: inline-block;
+      margin-right: 8px;
+    }
+    .how-it-works {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 12px 0;
+    }
+    .how-it-works p { color: #166534; margin-bottom: 6px; }
+    .how-it-works p:last-child { margin-bottom: 0; }
+    .footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid #e4e4e7;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #a1a1aa;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PORTADA -->
+  <div class="cover">
+    <span class="badge-branch">ligia-branch</span>
+    <h1>Informe de Cambios</h1>
+    <p class="subtitle">Detalle de archivos agregados y modificados respecto a <code>main</code></p>
+    <div class="meta">
+      <p><strong>Proyecto:</strong> Sistema SDD — Huerto Sustentable</p>
+      <p><strong>Rama:</strong> ligia-branch</p>
+      <p><strong>Fecha:</strong> 3 de agosto de 2026</p>
+      <p><strong>Commits:</strong> 2 (sobre commit inicial)</p>
+    </div>
+  </div>
+
+  <!-- RESUMEN -->
+  <h2><span class="section-icon">📊</span>Resumen General</h2>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number">29</div>
+      <div class="label">Archivos nuevos/modificados</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">+2.729</div>
+      <div class="label">Líneas de código</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">6</div>
+      <div class="label">Módulos implementados</div>
+    </div>
+  </div>
+
+  <p>Los cambios implementan el sistema completo de: autenticación con Supabase, integración con API de Open-Meteo para clima en tiempo real, catálogo de 35 cultivos chilenos con matching inteligente, componentes de navegación responsive, y recursos visuales del proyecto.</p>
+
+  <!-- 1. AUTENTICACIÓN -->
+  <h2><span class="section-icon">🔐</span>1. Sistema de Autenticación (Supabase)</h2>
+  
+  <table>
+    <thead>
+      <tr><th>Archivo</th><th>Qué hace</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>src/lib/supabase/client.ts</code></td>
+        <td>Cliente de Supabase para el navegador. Lo usa el Navbar para verificar si hay sesión activa y mostrar el email del usuario.</td>
+      </tr>
+      <tr>
+        <td><code>src/lib/supabase/server.ts</code></td>
+        <td>Cliente de Supabase para el servidor. Lo usan los Server Components y Route Handlers para operaciones protegidas.</td>
+      </tr>
+      <tr>
+        <td><code>src/app/login/page.tsx</code></td>
+        <td>Página <code>/login</code>. Formulario con email + contraseña que autentica contra Supabase. Muestra errores si las credenciales son incorrectas.</td>
+      </tr>
+      <tr>
+        <td><code>src/app/registro/page.tsx</code></td>
+        <td>Página <code>/registro</code>. Formulario completo (nombre, email, contraseña, confirmar contraseña). Valida que las contraseñas coincidan y tengan mínimo 6 caracteres.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="how-it-works">
+    <p><strong>Flujo del usuario:</strong></p>
+    <p>1. Clic en "Ingresar" (Navbar) → va a <code>/login</code></p>
+    <p>2. Si no tiene cuenta → link a <code>/registro</code></p>
+    <p>3. Al registrarse → recibe email de confirmación de Supabase</p>
+    <p>4. Al loguearse → el Navbar muestra su email + botón "Salir"</p>
+  </div>
+
+  <!-- 2. API CLIMA -->
+  <div class="page-break"></div>
+  <h2><span class="section-icon">🌤️</span>2. Integración API Open-Meteo (Clima)</h2>
+
+  <p>Open-Meteo es una API <strong>gratuita y sin API key</strong> que proporciona datos climáticos en tiempo real. Se usa para obtener condiciones meteorológicas de Puente Alto y cruzarlas con el catálogo de cultivos.</p>
+
+  <table>
+    <thead>
+      <tr><th>Archivo</th><th>Qué hace</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>src/lib/crop-matching.ts</code></td>
+        <td>Lógica central de matching. Evalúa cada cultivo con un puntaje de 0 a 100 basado en 5 factores climáticos.</td>
+      </tr>
+      <tr>
+        <td><code>src/app/api/cultivos/route.ts</code></td>
+        <td>Endpoint <code>/api/cultivos</code>. Consulta el clima y retorna los cultivos rankeados por aptitud.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Sistema de Puntuación (Score 0-100)</h3>
+  <table>
+    <thead>
+      <tr><th>Factor</th><th>Peso</th><th>Dato de Open-Meteo usado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Temperatura ambiente</td><td>35 pts</td><td><code>temperature_2m_min</code>, <code>temperature_2m_max</code></td></tr>
+      <tr><td>Temperatura del suelo</td><td>20 pts</td><td><code>soil_temperature_6cm</code></td></tr>
+      <tr><td>Época de siembra</td><td>25 pts</td><td>Mes actual vs. meses recomendados</td></tr>
+      <tr><td>Necesidad de riego</td><td>10 pts</td><td><code>et0_fao_evapotranspiration</code> + <code>precipitation_sum</code></td></tr>
+      <tr><td>Radiación UV</td><td>10 pts</td><td><code>uv_index_max</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>Un cultivo se considera <strong>APTO</strong> si su score es ≥ 50 y la temperatura mínima prevista no mata la planta.</p>
+
+  <h3>Endpoints Disponibles</h3>
+  <div class="code-block">
+/api/cultivos                          → Todos los cultivos con su score<br>
+/api/cultivos?aptos=true               → Solo los aptos para sembrar ahora<br>
+/api/cultivos?categoria=hortaliza      → Filtrar por categoría<br>
+/api/cultivos?dificultad=facil         → Filtrar por dificultad<br>
+/api/cultivos?espacio=maceta           → Filtrar por espacio mínimo<br>
+/api/cultivos?busqueda=tomate          → Buscar por nombre
+  </div>
+
+  <!-- 3. CATÁLOGO -->
+  <h2><span class="section-icon">🥬</span>3. Catálogo de Cultivos (35 total)</h2>
+
+  <p>Archivo: <code>src/data/crops.ts</code> — Base de datos local con todos los cultivos que se siembran en la zona central de Chile.</p>
+
+  <table>
+    <thead>
+      <tr><th>Categoría</th><th>Cantidad</th><th>Ejemplos</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Hortalizas</td><td>17</td><td>Tomate, lechuga, zanahoria, espinaca, papa, cebolla, ajo, pepino, zapallo, brócoli</td></tr>
+      <tr><td>Legumbres</td><td>6</td><td>Poroto verde, poroto granado, arveja, haba, lenteja, garbanzo</td></tr>
+      <tr><td>Vegetales/Hojas</td><td>2</td><td>Rúcula, kale</td></tr>
+      <tr><td>Hierbas aromáticas</td><td>7</td><td>Perejil, cilantro, albahaca, orégano, menta, romero, tomillo</td></tr>
+      <tr><td>Frutales menores</td><td>3</td><td>Frutilla, tomate cherry, frambuesa, arándano</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Datos incluidos por cada cultivo</h3>
+  <ul>
+    <li>Temperatura mínima tolerada, óptima (min y max), y del suelo para germinar</li>
+    <li>Necesidad hídrica (baja/media/alta) y tolerancia UV</li>
+    <li>Meses de siembra recomendados para zona central</li>
+    <li>Días hasta cosecha, profundidad de siembra, distancia entre plantas</li>
+    <li>Dificultad (fácil/media/difícil) y espacio mínimo (maceta/jardinera/suelo)</li>
+    <li>Tips de cultivo, plantas compañeras e incompatibles</li>
+  </ul>
+
+  <!-- 4. LAYOUT -->
+  <div class="page-break"></div>
+  <h2><span class="section-icon">🧩</span>4. Componentes de Layout</h2>
+
+  <table>
+    <thead>
+      <tr><th>Archivo</th><th>Qué hace</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>src/components/layout/Navbar.tsx</code></td>
+        <td>Barra de navegación principal. Responsive (desktop + menú hamburguesa en móvil). Muestra nombre del proyecto desde <code>.env.local</code>, links de navegación, y estado de auth.</td>
+      </tr>
+      <tr>
+        <td><code>src/components/layout/Header.tsx</code></td>
+        <td>Header alternativo con logo SVG del proyecto y menú móvil.</td>
+      </tr>
+      <tr>
+        <td><code>src/components/layout/Footer.tsx</code></td>
+        <td>Pie de página con copyright dinámico (año actual).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Integración en el Layout</h3>
+  <p>El archivo <code>src/app/layout.tsx</code> incluye Navbar y Footer de forma global. Todas las páginas los heredan automáticamente sin importarlos manualmente:</p>
+  <div class="code-block">
+┌─────────────────────────────────────┐<br>
+│  Navbar (nombre + links + auth)     │<br>
+├─────────────────────────────────────┤<br>
+│                                     │<br>
+│    &lt;main&gt; (contenido de página)     │<br>
+│                                     │<br>
+├─────────────────────────────────────┤<br>
+│  Footer (© 2026)                    │<br>
+└─────────────────────────────────────┘
+  </div>
+
+  <!-- 5. PÁGINAS -->
+  <h2><span class="section-icon">📄</span>5. Páginas Modificadas</h2>
+
+  <table>
+    <thead>
+      <tr><th>Archivo</th><th>Cambio realizado</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>src/app/layout.tsx</code></td>
+        <td>Integra Navbar + Footer globalmente. Título dinámico desde variable de entorno <code>NEXT_PUBLIC_NOMBRE_PROYECTO</code>.</td>
+      </tr>
+      <tr>
+        <td><code>src/app/page.tsx</code></td>
+        <td>Landing page con: hero (nombre del proyecto + descripción), 2 botones CTA ("Ver clima actual" y "¿Qué puedo plantar hoy?"), y 3 feature cards informativas.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 6. ESTILOS -->
+  <h2><span class="section-icon">🎨</span>6. Estilos y Paleta de Colores</h2>
+
+  <p>Archivo: <code>src/app/globals.css</code></p>
+
+  <h3>Variables CSS (paleta personalizada)</h3>
+  <table>
+    <thead>
+      <tr><th>Variable</th><th>Color</th><th>Uso</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--color-primario</code></td><td style="color:#0F5238; font-weight:bold;">#0F5238</td><td>Verde oscuro — botones, links activos, logo</td></tr>
+      <tr><td><code>--color-secundario</code></td><td style="color:#0F5238; font-weight:bold;">#bee3d5</td><td>Verde claro — fondos, badges, bordes suaves</td></tr>
+      <tr><td><code>--color-fondo</code></td><td style="color:#71717a;">#F8FAF6</td><td>Fondo general de la página</td></tr>
+      <tr><td><code>--color-texto</code></td><td style="color:#404943; font-weight:bold;">#404943</td><td>Texto principal</td></tr>
+      <tr><td><code>--color-hover</code></td><td style="color:#166534;">#e8f5e9</td><td>Fondo en hover de elementos</td></tr>
+      <tr><td><code>--color-danger</code></td><td style="color:#BA1A1A; font-weight:bold;">#BA1A1A</td><td>Rojo — botón "Salir", errores</td></tr>
+    </tbody>
+  </table>
+
+  <p>Estas variables se mapean a Tailwind como <code>bg-primary</code>, <code>text-primary</code>, <code>text-text-main</code>, etc. Para cambiar la paleta, solo edita los valores hex en <code>:root</code> del archivo CSS.</p>
+
+  <!-- 7. LÓGICA SUELO -->
+  <h2><span class="section-icon">🌱</span>7. Lógica de Análisis de Suelo</h2>
+
+  <table>
+    <thead>
+      <tr><th>Archivo</th><th>Qué hace</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>src/app/lib-logicaJS/soilRules.jsx</code></td>
+        <td>Reglas para análisis de tipo de suelo. Define condiciones según composición y características del terreno para recomendaciones.</td>
+      </tr>
+      <tr>
+        <td><code>src/app/lib-logicaJS/ApiIaturalist.jsx</code></td>
+        <td>Archivo preparado para integración futura con API de iNaturalist (identificación de plantas). Vacío por ahora.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 8. IMÁGENES -->
+  <h2><span class="section-icon">🖼️</span>8. Recursos Visuales</h2>
+
+  <p>Directorio: <code>src/app/imagenes/</code></p>
+
+  <table>
+    <thead>
+      <tr><th>Archivo</th><th>Descripción</th><th>Tamaño</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>logo.svg</code></td><td>Logo del proyecto (vectorial)</td><td>SVG</td></tr>
+      <tr><td><code>HeroCarouselSection.png</code></td><td>Imagen principal del hero/carousel</td><td>~1.4 MB</td></tr>
+      <tr><td><code>Detalle-suelo.png</code></td><td>Ilustración de suelo</td><td>~114 KB</td></tr>
+      <tr><td><code>Gotas-agua.png</code></td><td>Ilustración de riego</td><td>~109 KB</td></tr>
+      <tr><td><code>Interfaz-digital.png</code></td><td>Mockup de interfaz</td><td>~79 KB</td></tr>
+      <tr><td><code>control-humedad.png</code></td><td>Imagen sensor de humedad</td><td>~441 KB</td></tr>
+      <tr><td><code>imagen-1.webp</code></td><td>Imagen de contenido</td><td>~219 KB</td></tr>
+      <tr><td><code>imagen-3.png</code></td><td>Imagen de contenido</td><td>~2.7 MB</td></tr>
+      <tr><td><code>icon-cloud.svg</code></td><td>Icono de nube</td><td>SVG</td></tr>
+      <tr><td><code>icon-grass.svg</code></td><td>Icono de vegetación</td><td>SVG</td></tr>
+      <tr><td><code>icon-waves.svg</code></td><td>Icono de agua</td><td>SVG</td></tr>
+      <tr><td><code>icon-temp.png</code></td><td>Icono de temperatura</td><td>~1 KB</td></tr>
+      <tr><td><code>icon-analisis.png</code></td><td>Icono de análisis</td><td>~1 KB</td></tr>
+    </tbody>
+  </table>
+
+  <!-- CONFIGURACIÓN -->
+  <div class="page-break"></div>
+  <h2><span class="section-icon">⚙️</span>9. Configuración Necesaria</h2>
+
+  <h3>Variables de Entorno (<code>.env.local</code>)</h3>
+  <div class="code-block">
+# Nombre del proyecto (se muestra en Navbar y título)<br>
+NEXT_PUBLIC_NOMBRE_PROYECTO="Mi Huerto"<br>
+<br>
+# Supabase (autenticación y base de datos)<br>
+NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co<br>
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=tu-clave-aqui
+  </div>
+
+  <h3>Cómo ejecutar el proyecto</h3>
+  <div class="code-block">
+# 1. Instalar dependencias<br>
+npm install<br>
+<br>
+# 2. Crear .env.local con las variables de arriba<br>
+<br>
+# 3. Iniciar servidor de desarrollo<br>
+npm run dev<br>
+<br>
+# 4. Abrir en navegador<br>
+http://localhost:3000
+  </div>
+
+  <h3>Rutas del proyecto</h3>
+  <table>
+    <thead>
+      <tr><th>URL</th><th>Descripción</th><th>Acceso</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>/</code></td><td>Landing page principal</td><td>Público</td></tr>
+      <tr><td><code>/login</code></td><td>Iniciar sesión</td><td>Público</td></tr>
+      <tr><td><code>/registro</code></td><td>Crear cuenta nueva</td><td>Público</td></tr>
+      <tr><td><code>/clima</code></td><td>Datos climáticos en tiempo real</td><td>Público</td></tr>
+      <tr><td><code>/api/cultivos</code></td><td>API — cultivos con matching climático</td><td>Público (JSON)</td></tr>
+      <tr><td><code>/api/weather</code></td><td>API — datos climáticos raw</td><td>Público (JSON)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TIPOS -->
+  <h2><span class="section-icon">📝</span>10. Tipos TypeScript Agregados</h2>
+
+  <p>Archivo: <code>src/types/crops.ts</code> — Define las interfaces para todo el sistema de cultivos.</p>
+
+  <table>
+    <thead>
+      <tr><th>Tipo/Interface</th><th>Qué representa</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>Crop</code></td><td>Definición completa de un cultivo (nombre, temperaturas, riego, época, tips, etc.)</td></tr>
+      <tr><td><code>CropMatch</code></td><td>Resultado del cruce de un cultivo con el clima (score, isApt, razones)</td></tr>
+      <tr><td><code>ClimateConditions</code></td><td>Datos climáticos extraídos de Open-Meteo para el matching</td></tr>
+      <tr><td><code>MatchReason</code></td><td>Razón individual de por qué un cultivo es o no apto</td></tr>
+      <tr><td><code>CropCategory</code></td><td>Enum: hortaliza, legumbre, vegetal, hierba_aromatica, frutal_menor</td></tr>
+      <tr><td><code>Difficulty</code></td><td>Enum: facil, media, dificil</td></tr>
+      <tr><td><code>SpaceType</code></td><td>Enum: maceta, jardinera, suelo, cualquiera</td></tr>
+    </tbody>
+  </table>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>Informe de Cambios — Rama <code>ligia-branch</code></p>
+    <p>Generado el 3 de agosto de 2026 | Proyecto: Sistema SDD — Huerto Sustentable</p>
+  </div>
+
+</body>
+</html>
