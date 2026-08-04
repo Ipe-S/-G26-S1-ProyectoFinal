@@ -7,6 +7,9 @@ import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import styles from "./Nav.module.css";
 
+const navLinks = [
+  { label: "Mi Huerto", href: "/" },
+];
 
 export default function Navbar() {
   const pathname = usePathname();
