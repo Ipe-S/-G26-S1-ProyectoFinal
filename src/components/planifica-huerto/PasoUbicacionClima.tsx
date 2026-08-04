@@ -9,17 +9,17 @@ export default function PasoUbicacionClima({
   data,
   onUpdate,
   onNext,
+  onBack,
 }: StepProps<DatosPaso1>) {
   const [query, setQuery] = useState(data.direccion || "");
   const [results, setResults] = useState<GeocodingResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [error, setError] = useState("");
-  const [modoManual, setModoManual] = useState(data.modoIngreso === "manual");
+  const [superficie, setSuperficie] = useState<string>(data.comuna ? "" : "");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -50,7 +50,7 @@ export default function PasoUbicacionClima({
       setResults(json.results || []);
       setShowDropdown(true);
     } catch {
-      setError("No se pudo consultar la ubicación. Puedes usar el modo manual.");
+      setError("No se pudo consultar la ubicación. Intenta nuevamente.");
       setResults([]);
     } finally {
       setLoading(false);
@@ -84,209 +84,183 @@ export default function PasoUbicacionClima({
     setResults([]);
   }
 
-  function handleManualSubmit() {
-    if (!data.comuna.trim()) {
-      setError("Ingresa al menos la comuna.");
-      return;
-    }
-    onUpdate({ modoIngreso: "manual" });
-    onNext();
-  }
-
   function canContinue() {
     return data.latitud !== null && data.longitud !== null;
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-          Paso 1: Ubicación y Clima
-        </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Busca tu comuna o ciudad para obtener datos climáticos de tu zona.
-        </p>
+    <div className="w-full max-w-[1100px] mx-auto px-4 py-8">
+
+      {/* Badge paso */}
+      <div className="inline-flex items-center px-4 py-1 gap-2 rounded-full mb-8" style={{ background: "#D7E5BB" }}>
+        <span className="w-3 h-3 rounded-full" style={{ background: "#5A6745" }} aria-hidden="true" />
+        <span className="font-semibold text-sm uppercase tracking-wide" style={{ color: "#5A6745" }}>
+          Paso 1 de 5
+        </span>
       </div>
 
-      {/* Toggle modo */}
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => setModoManual(false)}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            !modoManual
-              ? "bg-primary text-white"
-              : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"
-          }`}
-        >
-          🔍 Buscar ubicación
-        </button>
-        <button
-          type="button"
-          onClick={() => setModoManual(true)}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            modoManual
-              ? "bg-primary text-white"
-              : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"
-          }`}
-        >
-          ✏️ Modo manual
-        </button>
-      </div>
+      {/* Layout 2 columnas */}
+      <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
 
-      {/* Modo API */}
-      {!modoManual && (
-        <div className="relative" ref={dropdownRef}>
-          <label htmlFor="search-location" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-            Buscar comuna o ciudad
-          </label>
-          <div className="relative">
-            <input
-              id="search-location"
-              type="text"
-              value={query}
-              onChange={(e) => handleInputChange(e.target.value)}
-              placeholder="Ej: Puente Alto, Santiago, Rancagua..."
-              className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-            />
-            {loading && (
-              <div className="absolute right-3 top-3.5">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-300 border-t-primary" />
+        {/* Columna izquierda: Texto */}
+        <div className="flex flex-col gap-4 w-full lg:max-w-[400px]">
+          <h1 className="font-serif font-semibold text-[32px] leading-tight italic" style={{ color: "#0F5238", letterSpacing: "-0.96px" }}>
+            Diagnostico del suelo
+          </h1>
+          <h2 className="font-semibold text-lg" style={{ color: "#0F5238" }}>
+            Ubicación y superficie
+          </h2>
+          <p className="text-base leading-7" style={{ color: "#404943" }}>
+            Comencemos con lo básico. Para ofrecerte un plan de siembra, riego y
+            recomendaciones de plantas debemos conocer las condiciones de tu suelo.
+          </p>
+
+          {/* Tip card */}
+          <div
+            className="flex items-start gap-3 rounded-xl p-4 mt-4"
+            style={{ background: "#F5F3EE", border: "1px solid rgba(191,201,193,0.3)" }}
+          >
+            <span className="text-lg mt-0.5" aria-hidden="true"></span>
+            <p className="text-sm leading-snug" style={{ color: "#404943" }}>
+              Tip: Toma la foto durante la &quot;hora dorada&quot; para identificar mejor las zonas de sombra.
+            </p>
+          </div>
+        </div>
+
+        {/* Columna derecha: Formulario card */}
+        <div
+          className="w-full lg:flex-1 rounded-2xl p-6 flex flex-col gap-6"
+          style={{ background: "#FAFAF7", border: "1px solid rgba(191,201,193,0.3)", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}
+        >
+          {/* Ubicación */}
+          <div className="flex flex-col gap-2" ref={dropdownRef}>
+            <label className="font-semibold text-xs uppercase tracking-wider" style={{ color: "#0F5238" }}>
+              Ingresa o confirma la ubicación
+            </label>
+            <div className="flex gap-2 relative">
+              <div className="relative flex-1">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></span>
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => handleInputChange(e.target.value)}
+                  placeholder="Ingresa dirección"
+                  className="w-full rounded-lg border pl-9 pr-4 py-3 text-sm outline-none"
+                  style={{ borderColor: "#BFC9C1", background: "#FFFFFF", color: "#191c1a" }}
+                />
+                {loading && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-300 border-t-[#0F5238]" />
+                  </div>
+                )}
               </div>
+              {/* Botón geolocalización */}
+              <button
+                type="button"
+                className="flex items-center justify-center w-12 h-12 rounded-lg border"
+                style={{ borderColor: "#BFC9C1", background: "#FFFFFF" }}
+                title="Usar mi ubicación actual"
+                onClick={() => {
+                  if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((pos) => {
+                      const zona = estimarZonaClimatica(pos.coords.latitude);
+                      onUpdate({
+                        latitud: pos.coords.latitude,
+                        longitud: pos.coords.longitude,
+                        zonaClimatica: zona,
+                        riesgoHeladas: pos.coords.latitude < -35,
+                        modoIngreso: "api",
+                        direccion: "Mi ubicación actual",
+                        comuna: "Detectada",
+                      });
+                      setQuery("Mi ubicación actual");
+                    });
+                  }
+                }}
+              >
+                <span className="text-lg">◎</span>
+              </button>
+            </div>
+
+            {/* Dropdown resultados */}
+            {showDropdown && results.length > 0 && (
+              <ul className="absolute z-20 mt-[72px] w-[calc(100%-48px-0.5rem)] rounded-lg border bg-white shadow-lg" style={{ borderColor: "#BFC9C1" }}>
+                {results.map((result) => (
+                  <li key={result.id}>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectResult(result)}
+                      className="w-full px-4 py-3 text-left hover:bg-[#F5F3EE] first:rounded-t-lg last:rounded-b-lg transition-colors"
+                    >
+                      <p className="text-sm font-medium" style={{ color: "#191c1a" }}>
+                        {result.name}
+                      </p>
+                      <p className="text-xs" style={{ color: "#404943" }}>
+                        {[result.admin2, result.admin1, result.country].filter(Boolean).join(", ")}
+                      </p>
+                    </button>
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
 
-          {/* Dropdown de resultados */}
-          {showDropdown && results.length > 0 && (
-            <ul className="absolute z-10 mt-1 w-full rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-800">
-              {results.map((result) => (
-                <li key={result.id}>
-                  <button
-                    type="button"
-                    onClick={() => handleSelectResult(result)}
-                    className="w-full px-4 py-3 text-left hover:bg-zinc-50 dark:hover:bg-zinc-700 first:rounded-t-lg last:rounded-b-lg"
-                  >
-                    <p className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
-                      {result.name}
-                    </p>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                      {[result.admin2, result.admin1, result.country].filter(Boolean).join(", ")}
-                      {" · "}Lat: {result.latitude.toFixed(2)}, Lon: {result.longitude.toFixed(2)}
-                    </p>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {showDropdown && results.length === 0 && !loading && query.length >= 3 && (
-            <div className="absolute z-10 mt-1 w-full rounded-lg border border-zinc-200 bg-white p-4 text-center text-sm text-zinc-500 shadow-lg dark:border-zinc-700 dark:bg-zinc-800">
-              No se encontraron resultados. Prueba con otro término o usa el modo manual.
+          {/* Superficie estimada */}
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold text-xs uppercase tracking-wider" style={{ color: "#0F5238" }}>
+              Superficie estimada
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                min={1}
+                max={500}
+                value={superficie}
+                onChange={(e) => setSuperficie(e.target.value)}
+                placeholder="Ej. 45"
+                className="w-full rounded-lg border px-4 py-3 text-sm outline-none pr-12"
+                style={{ borderColor: "#BFC9C1", background: "#FFFFFF", color: "#191c1a" }}
+              />
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold px-2 py-0.5 rounded" style={{ background: "#E8E5DF", color: "#404943" }}>
+                m²
+              </span>
             </div>
-          )}
-        </div>
-      )}
+          </div>
 
-      {/* Modo Manual */}
-      {modoManual && (
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="manual-comuna" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-              Comuna
-            </label>
-            <input
-              id="manual-comuna"
-              type="text"
-              value={data.comuna}
-              onChange={(e) => onUpdate({ comuna: e.target.value })}
-              placeholder="Ej: Puente Alto"
-              className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-            />
-          </div>
-          <div>
-            <label htmlFor="manual-ciudad" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-              Ciudad / Región
-            </label>
-            <input
-              id="manual-ciudad"
-              type="text"
-              value={data.direccion}
-              onChange={(e) => onUpdate({ direccion: e.target.value })}
-              placeholder="Ej: Santiago, Región Metropolitana"
-              className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-            />
-          </div>
-          <div>
-            <label htmlFor="manual-zona" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-              Zona Climática
-            </label>
-            <select
-              id="manual-zona"
-              value={data.zonaClimatica}
-              onChange={(e) => onUpdate({ zonaClimatica: e.target.value })}
-              className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-sm text-zinc-900 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
+          {/* Botones */}
+          <div className="flex items-center justify-between pt-2">
+            <button
+              type="button"
+              onClick={onBack}
+              className="px-6 py-3 rounded-full border text-sm font-medium transition-colors hover:bg-zinc-50"
+              style={{ borderColor: "#BFC9C1", color: "#191c1a" }}
             >
-              <option value="">Selecciona una zona</option>
-              <option value="arida">Árida (Norte Grande)</option>
-              <option value="semiarida">Semiárida (Norte Chico)</option>
-              <option value="mediterranea">Mediterránea (Zona Central)</option>
-              <option value="templada">Templada (Zona Sur)</option>
-              <option value="fria">Fría (Zona Austral)</option>
-            </select>
+              Salir
+            </button>
+            <button
+              type="button"
+              onClick={onNext}
+              disabled={!canContinue()}
+              className="px-6 py-3 rounded-full text-sm font-medium text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{ background: "#0F5238" }}
+            >
+              Continuar al Paso 2 →
+            </button>
           </div>
         </div>
-      )}
 
-      {/* Resumen de selección */}
-      {data.latitud && data.longitud && (
-        <div className="rounded-lg bg-green-50 border border-green-200 p-4 dark:bg-green-900/20 dark:border-green-800">
-          <p className="text-sm font-medium text-green-800 dark:text-green-300">
-            ✅ Ubicación seleccionada
-          </p>
-          <p className="mt-1 text-sm text-green-700 dark:text-green-400">
-            <strong>{data.comuna}</strong> — Lat: {data.latitud?.toFixed(4)}, Lon: {data.longitud?.toFixed(4)}
-          </p>
-          {data.zonaClimatica && (
-            <p className="text-xs text-green-600 dark:text-green-500 mt-1">
-              Zona climática: {data.zonaClimatica} · Riesgo de heladas: {data.riesgoHeladas ? "Sí" : "Bajo"}
-            </p>
-          )}
-        </div>
-      )}
+      </div>
 
       {/* Error */}
       {error && (
-        <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
+        <div className="mt-4 w-full rounded-xl p-4 text-sm" style={{ background: "#fef2f2", border: "1px solid #fecaca", color: "#991b1b" }}>
           {error}
         </div>
       )}
-
-      {/* Botón siguiente */}
-      <div className="flex justify-end pt-4">
-        {modoManual ? (
-          <button
-            type="button"
-            onClick={handleManualSubmit}
-            className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50"
-          >
-            Siguiente →
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={onNext}
-            disabled={!canContinue()}
-            className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Siguiente →
-          </button>
-        )}
-      </div>
     </div>
   );
 }
 
-/** Estima zona climática de Chile basada en latitud */
 function estimarZonaClimatica(lat: number): string {
   if (lat > -27) return "arida";
   if (lat > -32) return "semiarida";

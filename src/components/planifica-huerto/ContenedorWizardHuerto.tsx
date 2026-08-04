@@ -72,9 +72,9 @@ export default function ContenedorWizardHuerto() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       {/* Barra de progreso */}
-      <div className="mb-8">
+      <div className="mb-10 px-4 sm:px-12">
         <BarraProgresoPasos
           currentStep={currentStep}
           completedSteps={completedSteps}
