@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type { Crop } from "@/types/crops";
 
 interface TarjetaCultivoRecomendadoProps {
@@ -7,7 +8,7 @@ interface TarjetaCultivoRecomendadoProps {
   compatibilidad: number;
   selected: boolean;
   onToggle: (id: string) => void;
-  disabled?: boolean;
+  disabled: boolean;
 }
 
 export default function TarjetaCultivoRecomendado({
@@ -15,81 +16,90 @@ export default function TarjetaCultivoRecomendado({
   compatibilidad,
   selected,
   onToggle,
-  disabled = false,
+  disabled,
 }: TarjetaCultivoRecomendadoProps) {
-  const badgeColor = getBadgeColor(compatibilidad);
+  const handleClick = () => {
+    if (!disabled || selected) {
+      onToggle(crop.id);
+    }
+  };
+
+  // Determinar el texto de espacio - CORREGIDO
+  const espacioMap: Record<string, string> = {
+    maceta: "Apta para macetas",
+    jardinera: "Apta para jardinera",
+    suelo: "Apta para suelo",
+  };
+  const espacioTexto = espacioMap[crop.espacioMinimo] || "Apta para suelo";
+
+  // Determinar dificultad - CORREGIDO
+  const dificultadMap: Record<string, string> = {
+    facil: "Fácil",
+    media: "Dificultad: media",
+    dificil: "Difícil",
+  };
+  const dificultadTexto = dificultadMap[crop.dificultad] || "Fácil";
 
   return (
-    <button
-      type="button"
-      onClick={() => !disabled && onToggle(crop.id)}
-      disabled={disabled && !selected}
-      className={`relative flex flex-col rounded-xl border-2 p-4 text-left transition-all ${
-        selected
-          ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-          : disabled
-            ? "border-zinc-200 opacity-50 cursor-not-allowed dark:border-zinc-700"
-            : "border-zinc-200 hover:border-zinc-300 hover:shadow-sm dark:border-zinc-700 dark:hover:border-zinc-600"
-      }`}
+    <div
+      onClick={handleClick}
+      className={`
+        flex flex-col justify-start items-start p-4 gap-4
+        w-full min-h-[176px]
+        transition-all duration-200
+        rounded-[32px]
+        ${selected
+          ? "bg-[#F4F6F5] border-2 border-[#0F5238] shadow-[0px_20px_20px_rgba(15,82,56,0.06)]"
+          : "bg-white shadow-[0px_20px_20px_rgba(15,82,56,0.06)] hover:shadow-[0px_20px_25px_rgba(15,82,56,0.12)]"
+        }
+        ${disabled && !selected ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
+      `}
     >
-      {/* Badge de compatibilidad */}
-      <span
-        className={`absolute top-3 right-3 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold ${badgeColor}`}
-      >
-        {compatibilidad}%
-      </span>
+      <div className="flex flex-col items-start gap-2 w-full">
+        <div className="flex flex-row items-start justify-between w-full gap-1">
+          <div className="flex flex-row items-center gap-4">
+            <span className="text-base font-semibold leading-5 tracking-[0.7px] uppercase text-[#0F5238]">
+              {crop.nombre}
+            </span>
+            
+          </div>
 
-      {/* Checkbox visual */}
-      <div className="flex items-start gap-3">
-        <div
-          className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors ${
-            selected
-              ? "border-primary bg-primary text-white"
-              : "border-zinc-300 dark:border-zinc-600"
-          }`}
-          aria-hidden="true"
-        >
-          {selected && (
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-            </svg>
-          )}
+          <div className="flex flex-row items-start gap-0.5">
+            <span className="text-sm font-semibold leading-5 tracking-[0.7px] text-[#0F5238]">
+              Compatibilidad:
+            </span>
+            <span className="text-sm font-semibold leading-5 tracking-[0.7px] capitalize text-[#0F5238]">
+              {compatibilidad}%
+            </span>
+          </div>
         </div>
 
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 truncate pr-12">
-            {crop.nombre}
-          </p>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-            {crop.descripcion}
+        <div className="flex flex-row items-center gap-4">
+          <p className="text-sm font-normal leading-4 text-[#404943]">
+            {crop.descripcion || `${crop.nombre} es una excelente opción para tu jardín.`}
           </p>
         </div>
       </div>
 
-      {/* Info adicional */}
-      <div className="mt-3 flex flex-wrap gap-2">
-        <span className="inline-flex items-center rounded-md bg-zinc-100 px-2 py-1 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-          🗓️ {crop.diasCosecha} días
-        </span>
-        <span className="inline-flex items-center rounded-md bg-zinc-100 px-2 py-1 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-          {getDificultadEmoji(crop.dificultad)} {crop.dificultad}
-        </span>
-        <span className="inline-flex items-center rounded-md bg-zinc-100 px-2 py-1 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-          📏 {crop.espacioMinimo}
-        </span>
+      <div className="flex flex-row flex-wrap items-start gap-2 w-full">
+        <div className="flex flex-row items-center px-4 py-1 bg-[#DAE8BE] rounded h-7">
+          <span className="text-sm font-semibold leading-5 tracking-[0.7px] text-[#404943] whitespace-nowrap">
+            {dificultadTexto}
+          </span>
+        </div>
+
+        <div className="flex flex-row items-center px-4 py-1 bg-[#DAE8BE] rounded h-7">
+          <span className="text-sm font-semibold leading-5 tracking-[0.7px] text-[#404943] whitespace-nowrap">
+            Cosecha: {crop.diasCosecha || 90} días
+          </span>
+        </div>
+
+        <div className="flex flex-row items-center px-4 py-1 bg-[#DAE8BE] rounded h-7">
+          <span className="text-sm font-semibold leading-5 tracking-[0.7px] text-[#404943] whitespace-nowrap">
+            {espacioTexto}
+          </span>
+        </div>
       </div>
-    </button>
+    </div>
   );
-}
-
-function getBadgeColor(score: number): string {
-  if (score >= 70) return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-  if (score >= 50) return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-  return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-}
-
-function getDificultadEmoji(dif: string): string {
-  if (dif === "facil") return "🟢";
-  if (dif === "media") return "🟡";
-  return "🔴";
 }

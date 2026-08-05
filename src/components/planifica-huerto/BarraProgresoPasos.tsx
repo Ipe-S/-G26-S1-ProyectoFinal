@@ -30,6 +30,20 @@ export default function BarraProgresoPasos({
           const isClickable = isCompleted || isActive;
           const isReached = step.num <= currentStep;
 
+          // Determinar las clases CSS basado en el estado (ACTIVO tiene prioridad)
+          let buttonClasses = "flex h-8 items-center gap-1.5 rounded-full px-3 py-1 whitespace-nowrap text-sm font-semibold tracking-[0.3px] transition-colors";
+          
+          if (isActive) {
+            // PRIORIDAD 1: Estado activo - siempre se muestra así
+            buttonClasses += " bg-white border border-[#0f5238] text-[#0f5238] cursor-pointer";
+          } else if (isCompleted) {
+            // PRIORIDAD 2: Estado completado (solo si no está activo)
+            buttonClasses += " bg-[#707973] text-white cursor-pointer";
+          } else {
+            // PRIORIDAD 3: Estado neutral (no alcanzado)
+            buttonClasses += " bg-[#e2e5dc] text-[#5a6745] cursor-default";
+          }
+
           return (
             <li key={step.num} className="flex items-center gap-1.5 shrink-0">
               <button
@@ -37,16 +51,12 @@ export default function BarraProgresoPasos({
                 onClick={() => isClickable && onStepClick?.(step.num as WizardStep)}
                 disabled={!isClickable}
                 aria-current={isActive ? "step" : undefined}
-                className={`flex h-8 items-center gap-1.5 rounded-full px-3 py-1 whitespace-nowrap text-sm font-semibold tracking-[0.3px] transition-colors ${
-                  isClickable ? "cursor-pointer" : "cursor-default"
-                } ${isCompleted ? "bg-[#707973] text-white" : ""} ${
-                  isActive ? "bg-white border border-[#0f5238] text-[#0f5238]" : ""
-                } ${!isCompleted && !isActive ? "bg-[#e2e5dc] text-[#5a6745]" : ""}`}
+                className={buttonClasses}
               >
                 <span>
                   {step.num}. {step.label}
                 </span>
-                {isCompleted && (
+                {isCompleted && !isActive && (
                   <svg
                     className="size-4 shrink-0"
                     viewBox="0 0 24 24"

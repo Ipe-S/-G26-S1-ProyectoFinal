@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import type { DatosPaso4, StepProps, CategoriaFiltro, CultivoSeleccionado } from "@/types/huerto";
+import type { DatosPaso4, StepProps, CategoriaFiltro } from "@/types/huerto";
 import type { DatosPaso1, DatosPaso2, DatosPaso3 } from "@/types/huerto";
 import type { Crop } from "@/types/crops";
 import { CROPS_CATALOG } from "@/data/crops";
@@ -37,7 +37,7 @@ export default function PasoSeleccionCultivos({
   datosPaso3,
 }: PasoSeleccionCultivosProps) {
   const [cultivosScored, setCultivosScored] = useState<CultivoConScore[]>([]);
-  const [categoria, setCategoria] = useState<CategoriaFiltro>(data.categoriaFiltrada);
+  const [categoria, setCategoria] = useState<CategoriaFiltro>(data.categoriaFiltrada || "todas");
   const [loading, setLoading] = useState(true);
 
   const calcularCompatibilidad = useCallback(() => {
@@ -77,20 +77,22 @@ export default function PasoSeleccionCultivos({
   }, [calcularCompatibilidad]);
 
   function handleToggleCultivo(id: string) {
-    const current = data.cultivosSeleccionados;
+    const current = data.cultivosSeleccionados || [];
     const exists = current.find((c) => c.id === id);
 
     if (exists) {
       onUpdate({
+        ...data,
         cultivosSeleccionados: current.filter((c) => c.id !== id),
       });
     } else if (current.length < MAX_SELECCION) {
       const item = cultivosScored.find((c) => c.crop.id === id);
       if (item) {
         onUpdate({
+          ...data,
           cultivosSeleccionados: [
             ...current,
-            { id, nombre: item.crop.nombre, compatibilidad: item.score },
+            { id: item.crop.id, nombre: item.crop.nombre, compatibilidad: item.score },
           ],
         });
       }
@@ -99,7 +101,7 @@ export default function PasoSeleccionCultivos({
 
   function handleCategoriaChange(cat: CategoriaFiltro) {
     setCategoria(cat);
-    onUpdate({ categoriaFiltrada: cat });
+    onUpdate({ ...data, categoriaFiltrada: cat });
   }
 
   // Filtrar por categoría
@@ -111,31 +113,61 @@ export default function PasoSeleccionCultivos({
     return true;
   });
 
-  const canContinue = data.cultivosSeleccionados.length >= 1;
-  const seleccionados = data.cultivosSeleccionados;
+  const canContinue = (data.cultivosSeleccionados || []).length >= 1;
+  const seleccionados = data.cultivosSeleccionados || [];
+
+  // Obtener el nombre del tipo de suelo y riego para mostrarlo
+  const tipoSueloMap: Record<string, string> = {
+    franco: "suelo franco",
+    arenoso: "suelo arenoso",
+    arcilloso: "suelo arcilloso",
+    maceta_sustrato: "sustrato para maceta",
+  };
+
+  const tipoRiegoMap: Record<string, string> = {
+    goteo: "riego por goteo",
+    manual: "riego manual",
+    secano: "riego de secano",
+  };
+
+  const tipoSueloTexto = tipoSueloMap[datosPaso2.tipoSuelo || ""] || "suelo";
+  const tipoRiegoTexto = tipoRiegoMap[datosPaso3.tipoRiego || ""] || "riego";
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-          Paso 4: Selección de Cultivos
+    <div className="space-y-8">
+      {/* Context Info */}
+      <div className="space-y-6">
+        {/* Badge Paso 4 */}
+        <div className="inline-flex items-center rounded-full bg-[#D7E5BB] px-4 py-1">
+          <span className="text-sm font-semibold tracking-[0.7px] text-[#5A6745]">
+            Paso 4
+          </span>
+        </div>
+
+        {/* Heading */}
+        <h2 className="font-['Newsreader'] text-3xl font-semibold tracking-[-0.96px] text-[#0F5238]">
+          Selección de plantas
         </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Según tus condiciones, estos cultivos son los más compatibles. Selecciona de 1 a 5.
+
+        {/* Description con datos del usuario */}
+        <p className="text-lg leading-7 text-[#404943]">
+          De acuerdo a tus respuestas tu tipo de suelo es un{" "}
+          <span className="font-semibold text-[#0F5238]">{tipoSueloTexto}</span> y tu tipo de riego{" "}
+          <span className="font-semibold text-[#0F5238]">{tipoRiegoTexto}</span>, las plantas que mejor se adaptan a tus condiciones ambientales y temporada actual son:
         </p>
       </div>
 
-      {/* Filtro de categorías */}
-      <div className="flex flex-wrap gap-2">
+      {/* Tabs de categorías - Estilo Figma */}
+      <div className="flex items-start gap-0">
         {CATEGORIAS.map((cat) => (
           <button
             key={cat.value}
             type="button"
             onClick={() => handleCategoriaChange(cat.value)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-3 py-1 text-base transition-all ${
               categoria === cat.value
-                ? "bg-primary text-white"
-                : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                ? "border-b-2 border-[#02542D] font-semibold text-[#303030]"
+                : "border-b border-[#B2B2B2] font-normal text-[#767676] hover:text-[#303030]"
             }`}
           >
             {cat.label}
@@ -143,15 +175,18 @@ export default function PasoSeleccionCultivos({
         ))}
       </div>
 
-      {/* Contador de selección */}
-      <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-2 dark:bg-zinc-800">
-        <span className="text-sm text-zinc-600 dark:text-zinc-400">
-          Seleccionados: <strong className="text-primary">{seleccionados.length}</strong> / {MAX_SELECCION}
+      {/* Contador de selección - Estilo Figma */}
+      <div className="flex items-center justify-between rounded-lg bg-white px-5 py-3 shadow-sm">
+        <span className="text-base text-[#404943]">
+          Seleccionados: <span className="font-semibold text-[#0F5238]">{seleccionados.length}</span>/{MAX_SELECCION}
         </span>
         {seleccionados.length > 0 && (
-          <div className="flex gap-1">
+          <div className="flex flex-wrap gap-2">
             {seleccionados.map((c) => (
-              <span key={c.id} className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+              <span
+                key={c.id}
+                className="inline-flex items-center rounded-full bg-[#D9D9D9] px-4 py-1 text-sm font-semibold tracking-[0.7px] text-[#5A6745]"
+              >
                 {c.nombre}
               </span>
             ))}
@@ -159,13 +194,18 @@ export default function PasoSeleccionCultivos({
         )}
       </div>
 
+      {/* Subtítulo */}
+      <p className="text-lg leading-6 text-[#404943]">
+        Selecciona máximo 5 plantas.
+      </p>
+
       {/* Grid de cultivos */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-300 border-t-primary" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#D7E5BB] border-t-[#0F5238]" />
         </div>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-6">
           {cultivosFiltrados.map((item) => (
             <TarjetaCultivoRecomendado
               key={item.crop.id}
@@ -180,27 +220,41 @@ export default function PasoSeleccionCultivos({
       )}
 
       {cultivosFiltrados.length === 0 && !loading && (
-        <p className="text-center text-sm text-zinc-500 py-8">
+        <p className="py-8 text-center text-sm text-[#404943]">
           No hay cultivos en esta categoría. Prueba con "Todas".
         </p>
       )}
 
-      {/* Navegación */}
-      <div className="flex justify-between pt-4">
+      {/* Navegación - Estilo Figma */}
+      <div className="flex items-center justify-end gap-4 border-t border-[#BFC9C1] pt-4">
         <button
           type="button"
           onClick={onBack}
-          className="rounded-lg border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          className="rounded-full border-2 border-[#BFC9C1] px-12 py-3 text-base font-normal text-[#0F5238] transition-colors hover:bg-[#F4F6F5]"
         >
-          ← Anterior
+          Volver atrás
         </button>
         <button
           type="button"
           onClick={onNext}
           disabled={!canContinue}
-          className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-3 rounded-full bg-[#0F5238] px-8 py-3 text-base font-normal text-white transition-colors hover:bg-[#0a3d2a] disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Ver mi plan →
+          Generar mi plan
+          <svg
+            className="size-4 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 12h14M12 5l7 7-7 7"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </button>
       </div>
     </div>
@@ -212,10 +266,8 @@ export default function PasoSeleccionCultivos({
 // ══════════════════════════════════════════
 
 function calcularScoreTemperatura(crop: Crop, paso1: DatosPaso1): number {
-  // Si no tenemos datos de clima, dar puntaje neutro
   if (!paso1.zonaClimatica) return 15;
 
-  // Estimar temp media según zona
   const tempMedia: Record<string, number> = {
     arida: 22, semiarida: 18, mediterranea: 15, templada: 12, fria: 8,
   };
@@ -229,15 +281,11 @@ function calcularScoreTemperatura(crop: Crop, paso1: DatosPaso1): number {
 function calcularScoreSuelo(crop: Crop, paso2: DatosPaso2): number {
   if (!paso2.tipoSuelo) return 10;
 
-  // Maceta/sustrato es compatible con todo lo que no sea "suelo"
   if (paso2.tipoSuelo === "maceta_sustrato") {
     return crop.espacioMinimo === "maceta" || crop.espacioMinimo === "jardinera" ? 20 : 8;
   }
-  // Franco es ideal para casi todo
   if (paso2.tipoSuelo === "franco") return 20;
-  // Arenoso: bueno para raíces (zanahoria, rabanito)
   if (paso2.tipoSuelo === "arenoso") return 14;
-  // Arcilloso: algunas plantas toleran
   return 10;
 }
 
@@ -252,7 +300,6 @@ function calcularScoreSol(crop: Crop, paso3: DatosPaso3): number {
 function calcularScoreDrenaje(crop: Crop, paso3: DatosPaso3): number {
   if (!paso3.drenaje) return 8;
 
-  // Plantas de alta necesidad hídrica toleran drenaje bajo
   if (crop.necesidadHidrica === "alta" && paso3.drenaje === "bajo") return 12;
   if (crop.necesidadHidrica === "alta" && paso3.drenaje === "medio") return 15;
   if (crop.necesidadHidrica === "baja" && paso3.drenaje === "alto") return 15;
@@ -263,7 +310,7 @@ function calcularScoreDrenaje(crop: Crop, paso3: DatosPaso3): number {
 function calcularScoreRiego(crop: Crop, paso3: DatosPaso3): number {
   if (!paso3.tipoRiego) return 5;
 
-  if (paso3.tipoRiego === "goteo") return 10; // Goteo cubre todo
+  if (paso3.tipoRiego === "goteo") return 10;
   if (paso3.tipoRiego === "manual" && crop.necesidadHidrica !== "alta") return 8;
   if (paso3.tipoRiego === "secano" && crop.necesidadHidrica === "baja") return 10;
   if (paso3.tipoRiego === "secano" && crop.necesidadHidrica === "alta") return 2;
