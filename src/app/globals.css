@@ -231,4 +231,27 @@ body {
     right: 0;
     border-right-color: var(--border);
   }
+  
+}
+/* Reglas de impresión: solo se aplican al usar Ctrl+P / Cmd+P o window.print() */
+@media print {
+  /* Oculta cualquier elemento marcado explícitamente como no-print (botones, etc.) */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Oculta el header y footer del layout compartido */
+  header,
+  footer {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  /* Evita que las tarjetas se corten a la mitad entre páginas */
+  section {
+    break-inside: avoid;
+  }
 }

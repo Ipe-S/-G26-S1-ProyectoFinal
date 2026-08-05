@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import type { HuertoWizardData } from "@/types/huerto";
 import { CROPS_CATALOG } from "@/data/crops";
-import { createClient } from "@/lib/supabase/client";
 
 interface PasoPlanAccionProps {
   data: HuertoWizardData;
@@ -12,10 +10,6 @@ interface PasoPlanAccionProps {
 }
 
 export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccionProps) {
-  const [guardando, setGuardando] = useState(false);
-  const [guardado, setGuardado] = useState(false);
-  const [error, setError] = useState("");
-
   const cultivosDetalle = data.paso4.cultivosSeleccionados.map((sel) => {
     const crop = CROPS_CATALOG.find((c) => c.id === sel.id);
     return { ...sel, crop };
@@ -24,50 +18,8 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
   const mesActual = new Date().getMonth(); // 0-11
   const MESES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
-  async function handleGuardar() {
-    setGuardando(true);
-    setError("");
-
-    try {
-      const supabase = createClient();
-      const { data: userData } = await supabase.auth.getUser();
-
-      if (!userData.user) {
-        setError("Debes iniciar sesión para guardar tu plan.");
-        setGuardando(false);
-        return;
-      }
-
-      const { error: dbError } = await supabase.from("huertos").insert({
-        user_id: userData.user.id,
-        ubicacion: {
-          direccion: data.paso1.direccion,
-          comuna: data.paso1.comuna,
-          latitud: data.paso1.latitud,
-          longitud: data.paso1.longitud,
-          zonaClimatica: data.paso1.zonaClimatica,
-          superficie: data.paso1.superficie,
-        },
-        espacio: {
-          tipoSuelo: data.paso2.tipoSuelo,
-        },
-        condiciones: {
-          orientacion: data.paso3.orientacion,
-          exposicionSolar: data.paso3.exposicionSolar,
-          tipoRiego: data.paso3.tipoRiego,
-          drenaje: data.paso3.drenaje,
-        },
-        cultivos: data.paso4.cultivosSeleccionados,
-        created_at: new Date().toISOString(),
-      });
-
-      if (dbError) throw dbError;
-      setGuardado(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al guardar el plan.");
-    } finally {
-      setGuardando(false);
-    }
+  function handleDescargar() {
+    window.print();
   }
 
   return (
@@ -172,7 +124,7 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
                               className="inline-flex items-center gap-1 rounded bg-[#D7E5BB] px-2 py-1 text-[10px] font-semibold text-[#404943]"
                               title="Siembra"
                             >
-                              <img src="/imagenes/iconos/siembra.svg" alt="" className="h-8 w-8" />
+                              <img src="/imagenes/iconos/siembra.svg" alt="" className="h-3 w-3" />
                               S
                             </span>
                           )}
@@ -181,7 +133,7 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
                               className="inline-flex items-center gap-1 rounded bg-[#FFF4D2] px-2 py-1 text-[10px] font-semibold text-[#404943]"
                               title="Cosecha"
                             >
-                              <img src="/imagenes/iconos/cosecha.svg" alt="" className="h-8 w-8" />
+                              <img src="/imagenes/iconos/cosecha.svg" alt="" className="h-3 w-3" />
                               C
                             </span>
                           )}
@@ -258,21 +210,7 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
       </section>
 
       {/* Acciones */}
-      {error && (
-        <div className="w-full rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {error}
-        </div>
-      )}
-
-      {guardado && (
-        <div className="w-full rounded-xl border border-green-200 bg-green-50 p-4 text-center">
-          <p className="text-sm font-medium text-green-800">
-            ✅ ¡Plan guardado exitosamente en tu cuenta!
-          </p>
-        </div>
-      )}
-
-      <div className="flex w-full flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
+      <div className="no-print flex w-full flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
         <button
           type="button"
           onClick={onBack}
@@ -287,16 +225,13 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
         >
           Nuevo Plan
         </button>
-        {!guardado && (
-          <button
-            type="button"
-            onClick={handleGuardar}
-            disabled={guardando}
-            className="rounded-full bg-[#0F5238] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-          >
-            {guardando ? "Guardando..." : "Descargar mi plan"}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={handleDescargar}
+          className="rounded-full bg-[#0F5238] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+        >
+          Descargar mi plan
+        </button>
       </div>
     </div>
   );
