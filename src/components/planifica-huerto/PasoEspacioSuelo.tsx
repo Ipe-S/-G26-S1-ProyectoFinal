@@ -1,152 +1,150 @@
 "use client";
 
-import type { DatosPaso2, StepProps, TipoSuelo, Orientacion } from "@/types/huerto";
+import type { DatosPaso2, StepProps, TipoSuelo, Drenaje } from "@/types/huerto";
+import OptionCard from "@/components/layout/optioncard";
 
-const TIPOS_SUELO: { value: TipoSuelo; label: string; icon: string; desc: string }[] = [
-  { value: "arcilloso", label: "Arcilloso", icon: "🧱", desc: "Pesado, retiene agua, se compacta" },
-  { value: "arenoso", label: "Arenoso", icon: "🏖️", desc: "Ligero, drena rápido, bajo en nutrientes" },
-  { value: "franco", label: "Franco", icon: "🌱", desc: "Equilibrado, ideal para la mayoría de cultivos" },
-  { value: "maceta_sustrato", label: "Maceta / Sustrato", icon: "🪴", desc: "Sustrato preparado en contenedor" },
+interface PasoEspacioSueloProps extends StepProps<DatosPaso2> {
+  drenaje: Drenaje | null;
+  onUpdateDrenaje: (drenaje: Drenaje) => void;
+}
+
+const TIPOS_SUELO: { value: TipoSuelo; label: string; image: string; desc: string }[] = [
+  {
+    value: "arenoso",
+    label: "Arenoso",
+    image: "/imagenes/iconos/arenoso.svg",
+    desc: "Se deshace inmediatamente, no mantiene forma.",
+  },
+  {
+    value: "franco",
+    label: "Equilibrado",
+    image: "/imagenes/iconos/franco.svg",
+    desc: "Mantiene la forma pero se rompe si se presiona.",
+  },
+  {
+    value: "arcilloso",
+    label: "Arcilloso",
+    image: "/imagenes/iconos/arcilloso.svg",
+    desc: "Se siente pegajoso y mantiene una forma sólida.",
+  },
+  {
+    value: "maceta_sustrato",
+    label: "Sustrato preparado",
+    image: "/imagenes/iconos/sustrato.svg",
+    desc: "Tierra preparada para germinar. Ej: Tierra de hoja.",
+  },
 ];
 
-const ORIENTACIONES: { value: Orientacion; label: string; icon: string; desc: string }[] = [
-  { value: "norte", label: "Norte", icon: "☀️", desc: "Máximo sol (ideal para hortalizas)" },
-  { value: "oriente", label: "Oriente", icon: "🌅", desc: "Sol de mañana (suave y constante)" },
-  { value: "poniente", label: "Poniente", icon: "🌇", desc: "Sol de tarde (intenso en verano)" },
-  { value: "sur", label: "Sur", icon: "🌥️", desc: "Menos sol directo (cultivos de sombra)" },
+const DRENAJES: { value: Drenaje; label: string; image: string; desc: string }[] = [
+  {
+    value: "alto",
+    label: "Drenaje rapido",
+    image: "/imagenes/iconos/rapido.svg",
+    desc: "El agua desaparece casi instantáneamente. El suelo se siente seco poco después.",
+  },
+  {
+    value: "medio",
+    label: "Equilibrado",
+    image: "/imagenes/iconos/equilibrado.svg",
+    desc: "El agua drena de forma constante y mantiene la humedad sin formar charcos persistentes.",
+  },
+  {
+    value: "bajo",
+    label: "Estancamiento",
+    image: "/imagenes/iconos/estancado.svg",
+    desc: "Se forman charcos que duran horas. El suelo se siente lodoso o pesado.",
+  },
 ];
 
 export default function PasoEspacioSuelo({
   data,
   onUpdate,
+  drenaje,
+  onUpdateDrenaje,
   onNext,
   onBack,
-}: StepProps<DatosPaso2>) {
+}: PasoEspacioSueloProps) {
   function canContinue() {
-    return data.tipoSuelo !== null && data.superficie !== null && data.orientacion !== null;
+    return data.tipoSuelo !== null && drenaje !== null;
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-          Paso 2: Espacio Disponible y Suelo
+    <div className="flex flex-col items-start gap-8">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-[32px] font-semibold leading-10 tracking-[-0.96px] text-[#0F5238] font-serif">
+          Tipo de suelo y drenaje
         </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Define las características del terreno donde irá tu huerto.
+        <p className="text-lg leading-7 text-[#404943]">
+          Toma un poco de tierra húmeda y apriétala en la mano para hacer una
+          bola. Al abrir la mano observa como se comporta la tierra,
+          selecciona la opción que mas se parezca a lo observado.
         </p>
       </div>
 
       {/* Tipo de Suelo */}
-      <fieldset>
-        <legend className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">
-          Tipo de suelo
+      <fieldset className="flex w-full flex-col gap-4">
+        <div className="gap-4"> 
+          <legend className="text-lg font-semibold text-[#0F5238]">
+          Seleccione su tipo de suelo
         </legend>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        </div>
+       
+        <div className="flex flex-wrap gap-6">
           {TIPOS_SUELO.map((tipo) => (
-            <button
+            <OptionCard
               key={tipo.value}
-              type="button"
+              image={tipo.image}
+              title={tipo.label}
+              description={tipo.desc}
+              selected={data.tipoSuelo === tipo.value}
               onClick={() => onUpdate({ tipoSuelo: tipo.value })}
-              className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 text-center transition-all ${
-                data.tipoSuelo === tipo.value
-                  ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                  : "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
-              }`}
-            >
-              <span className="text-2xl" aria-hidden="true">{tipo.icon}</span>
-              <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">{tipo.label}</span>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">{tipo.desc}</span>
-            </button>
+            />
           ))}
         </div>
       </fieldset>
 
-      {/* Superficie */}
-      <div>
-        <label htmlFor="superficie" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
-          Superficie disponible (m²)
-        </label>
-        <div className="flex items-center gap-4">
-          <input
-            id="superficie"
-            type="range"
-            min={1}
-            max={50}
-            step={1}
-            value={data.superficie || 5}
-            onChange={(e) => onUpdate({ superficie: Number(e.target.value) })}
-            className="flex-1 h-2 rounded-lg appearance-none bg-zinc-200 dark:bg-zinc-700 accent-primary"
-          />
-          <div className="flex items-center gap-1">
-            <input
-              type="number"
-              min={1}
-              max={200}
-              value={data.superficie || ""}
-              onChange={(e) => onUpdate({ superficie: Number(e.target.value) || null })}
-              className="w-16 rounded-lg border border-zinc-300 px-2 py-2 text-center text-sm text-zinc-900 focus:border-primary focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-            />
-            <span className="text-sm text-zinc-500">m²</span>
-          </div>
-        </div>
-        <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
-          {getSuperficieHint(data.superficie)}
+      {/* Drenaje (se guarda en data.paso3.drenaje, por eso usa onUpdateDrenaje) */}
+      <fieldset className="flex w-full flex-col gap-4">
+        <p className="text-lg text-[#404943]">
+          ¿Cómo se comporta el agua después de regar o llover en tu zona de
+          cultivo? Selecciona la opción que se adecue más.
         </p>
-      </div>
-
-      {/* Orientación Solar */}
-      <fieldset>
-        <legend className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">
-          Orientación solar predominante
+        <legend className="text-lg font-semibold text-[#0F5238]">
+          Seleccione su drenaje
         </legend>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {ORIENTACIONES.map((ori) => (
-            <button
-              key={ori.value}
-              type="button"
-              onClick={() => onUpdate({ orientacion: ori.value })}
-              className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 text-center transition-all ${
-                data.orientacion === ori.value
-                  ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                  : "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
-              }`}
-            >
-              <span className="text-2xl" aria-hidden="true">{ori.icon}</span>
-              <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">{ori.label}</span>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">{ori.desc}</span>
-            </button>
+        <div className="flex flex-wrap gap-6">
+          {DRENAJES.map((dren) => (
+            <OptionCard
+              key={dren.value}
+              image={dren.image}
+              title={dren.label}
+              description={dren.desc}
+              selected={drenaje === dren.value}
+              onClick={() => onUpdateDrenaje(dren.value)}
+              iconBackground
+            />
           ))}
         </div>
       </fieldset>
 
       {/* Navegación */}
-      <div className="flex justify-between pt-4">
+      <div className="flex w-full justify-end gap-3 pt-2">
         <button
           type="button"
           onClick={onBack}
-          className="rounded-lg border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          className="rounded-full border border-[#BFC9C1] px-6 py-3 text-sm font-medium text-[#0F5238] transition-colors hover:bg-[#e8f5e9]"
         >
-          ← Anterior
+          Volver átras
         </button>
         <button
           type="button"
           onClick={onNext}
           disabled={!canContinue()}
-          className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 rounded-full bg-[#0F5238] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Siguiente →
+          Continuar al Paso 3 →
         </button>
       </div>
     </div>
   );
-}
-
-function getSuperficieHint(m2: number | null): string {
-  if (!m2) return "Mueve el slider o escribe un valor";
-  if (m2 <= 2) return "Espacio para macetas y jardineras (balcón)";
-  if (m2 <= 5) return "Huerto pequeño: hierbas y hortalizas de hoja";
-  if (m2 <= 15) return "Huerto familiar: variedad de cultivos";
-  if (m2 <= 30) return "Huerto amplio: incluye legumbres y frutales";
-  return "Huerto extenso: producción diversificada";
 }

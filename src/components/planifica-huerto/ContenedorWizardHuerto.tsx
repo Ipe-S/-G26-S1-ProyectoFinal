@@ -24,7 +24,7 @@ export default function ContenedorWizardHuerto() {
   // Calcular pasos completados
   const completedSteps: WizardStep[] = [];
   if (isStep1Complete(data.paso1)) completedSteps.push(1);
-  if (isStep2Complete(data.paso2)) completedSteps.push(2);
+  if (isStep2Complete(data.paso2, data.paso3)) completedSteps.push(2);
   if (isStep3Complete(data.paso3)) completedSteps.push(3);
   if (isStep4Complete(data.paso4)) completedSteps.push(4);
   if (data.paso5.planGenerado) completedSteps.push(5);
@@ -96,6 +96,8 @@ export default function ContenedorWizardHuerto() {
           <PasoEspacioSuelo
             data={data.paso2}
             onUpdate={updatePaso2}
+            drenaje={data.paso3.drenaje}
+            onUpdateDrenaje={(drenaje) => updatePaso3({ drenaje })}
             onNext={goNext}
             onBack={goBack}
           />
@@ -145,18 +147,19 @@ export default function ContenedorWizardHuerto() {
 // ══════════════════════════════════════════
 
 function isStep1Complete(paso1: DatosPaso1): boolean {
-  if (paso1.modoIngreso === "manual") {
-    return paso1.comuna.trim().length > 0;
-  }
-  return paso1.latitud !== null && paso1.longitud !== null;
+  const ubicacionOk =
+    paso1.modoIngreso === "manual"
+      ? paso1.comuna.trim().length > 0
+      : paso1.latitud !== null && paso1.longitud !== null;
+  return ubicacionOk && paso1.superficie !== null;
 }
 
-function isStep2Complete(paso2: DatosPaso2): boolean {
-  return paso2.tipoSuelo !== null && paso2.superficie !== null && paso2.orientacion !== null;
+function isStep2Complete(paso2: DatosPaso2, paso3: DatosPaso3): boolean {
+  return paso2.tipoSuelo !== null && paso3.drenaje !== null;
 }
 
 function isStep3Complete(paso3: DatosPaso3): boolean {
-  return paso3.exposicionSolar !== null && paso3.tipoRiego !== null && paso3.drenaje !== null;
+  return paso3.orientacion !== null && paso3.tipoRiego !== null;
 }
 
 function isStep4Complete(paso4: DatosPaso4): boolean {

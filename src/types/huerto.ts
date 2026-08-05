@@ -19,7 +19,7 @@ export type WizardStep = 1 | 2 | 3 | 4 | 5;
 // DATOS POR PASO
 // ══════════════════════════════════════════
 
-/** Paso 1: Ubicación y Clima */
+/** Paso 1: Ubicación, Superficie y Clima */
 export interface DatosPaso1 {
   direccion: string;
   comuna: string;
@@ -29,17 +29,17 @@ export interface DatosPaso1 {
   tempMediaTemporada: number | null;
   riesgoHeladas: boolean;
   modoIngreso: ModoIngreso;
+  superficie: number | null;
 }
 
-/** Paso 2: Espacio Disponible y Estructura del Terreno */
+/** Paso 2: Tipo de Suelo (el drenaje se guarda en DatosPaso3) */
 export interface DatosPaso2 {
   tipoSuelo: TipoSuelo | null;
-  superficie: number | null;
-  orientacion: Orientacion | null;
 }
 
-/** Paso 3: Condiciones Ambientales */
+/** Paso 3: Condiciones Ambientales, Orientación y Riego */
 export interface DatosPaso3 {
+  orientacion: Orientacion | null;
   exposicionSolar: ExposicionSolar | null;
   horasSolEstimadas: number | null;
   tipoRiego: TipoRiego | null;
@@ -95,13 +95,13 @@ export const INITIAL_WIZARD_DATA: HuertoWizardData = {
     tempMediaTemporada: null,
     riesgoHeladas: false,
     modoIngreso: "api",
+    superficie: null,
   },
   paso2: {
     tipoSuelo: null,
-    superficie: null,
-    orientacion: null,
   },
   paso3: {
+    orientacion: null,
     exposicionSolar: null,
     horasSolEstimadas: null,
     tipoRiego: null,

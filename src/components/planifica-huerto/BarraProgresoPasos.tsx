@@ -1,12 +1,11 @@
-"use client";
-
 import type { WizardStep } from "@/types/huerto";
 
+// Los 5 pasos del wizard, mostrados como chips en el stepper.
 const STEPS = [
   { num: 1, label: "Ubicación" },
-  { num: 2, label: "Espacio" },
-  { num: 3, label: "Condiciones" },
-  { num: 4, label: "Cultivos" },
+  { num: 2, label: "Suelo y drenaje" },
+  { num: 3, label: "Condiciones ambientales" },
+  { num: 4, label: "Selección de plantas" },
   { num: 5, label: "Plan Final" },
 ] as const;
 
@@ -23,59 +22,52 @@ export default function BarraProgresoPasos({
 }: BarraProgresoPasosProps) {
   return (
     <nav aria-label="Progreso del formulario" className="w-full">
-      {/* Desktop */}
-      <ol className="hidden sm:flex items-center justify-between">
+      {/* Fila completa: solo desde 1024px (lg), donde ya cabe en una línea */}
+      <ol className="hidden lg:flex items-center justify-center gap-1.5 flex-nowrap">
         {STEPS.map((step, index) => {
           const isCompleted = completedSteps.includes(step.num as WizardStep);
           const isActive = currentStep === step.num;
           const isClickable = isCompleted || isActive;
+          const isReached = step.num <= currentStep;
 
           return (
-            <li key={step.num} className="flex items-center flex-1 last:flex-none">
+            <li key={step.num} className="flex items-center gap-1.5 shrink-0">
               <button
                 type="button"
                 onClick={() => isClickable && onStepClick?.(step.num as WizardStep)}
                 disabled={!isClickable}
-                className={`flex flex-col items-center gap-1.5 group ${
-                  isClickable ? "cursor-pointer" : "cursor-default"
-                }`}
                 aria-current={isActive ? "step" : undefined}
+                className={`flex h-8 items-center gap-1.5 rounded-full px-3 py-1 whitespace-nowrap text-sm font-semibold tracking-[0.3px] transition-colors ${
+                  isClickable ? "cursor-pointer" : "cursor-default"
+                } ${isCompleted ? "bg-[#707973] text-white" : ""} ${
+                  isActive ? "bg-white border border-[#0f5238] text-[#0f5238]" : ""
+                } ${!isCompleted && !isActive ? "bg-[#e2e5dc] text-[#5a6745]" : ""}`}
               >
-                <span
-                  className={`flex items-center justify-center w-9 h-9 rounded-full text-sm font-semibold transition-colors ${
-                    isCompleted
-                      ? "bg-primary text-white"
-                      : isActive
-                        ? "bg-primary text-white ring-4 ring-primary/20"
-                        : "bg-zinc-200 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400"
-                  }`}
-                >
-                  {isCompleted ? (
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  ) : (
-                    step.num
-                  )}
+                <span>
+                  {step.num}. {step.label}
                 </span>
-                <span
-                  className={`text-xs font-medium transition-colors ${
-                    isActive || isCompleted
-                      ? "text-primary dark:text-secondary"
-                      : "text-zinc-400 dark:text-zinc-500"
-                  }`}
-                >
-                  {step.label}
-                </span>
+                {isCompleted && (
+                  <svg
+                    className="size-4 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7 12.5l3 3 7-7"
+                      stroke="white"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
               </button>
 
-              {/* Connector line */}
               {index < STEPS.length - 1 && (
                 <div
-                  className={`flex-1 h-0.5 mx-3 mt-[-1.25rem] transition-colors ${
-                    isCompleted
-                      ? "bg-primary"
-                      : "bg-zinc-200 dark:bg-zinc-700"
+                  className={`h-px w-[20px] shrink-0 ${
+                    isReached ? "bg-[#2D6A4F]" : "bg-[#A6B3A9]"
                   }`}
                   aria-hidden="true"
                 />
@@ -85,21 +77,24 @@ export default function BarraProgresoPasos({
         })}
       </ol>
 
-      {/* Mobile: compact version */}
-      <div className="sm:hidden flex items-center justify-between px-2">
-        <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Paso {currentStep} de 5: <span className="text-primary">{STEPS[currentStep - 1].label}</span>
+      {/* Indicador compacto: visible debajo de 1024px, siempre en una sola línea */}
+      <div className="lg:hidden flex items-center justify-between gap-3">
+        <p className="text-sm font-medium text-[#404943] truncate">
+          Paso {currentStep} de {STEPS.length}:{" "}
+          <span className="text-[#0f5238]">
+            {STEPS[currentStep - 1]?.label ?? ""}
+          </span>
         </p>
-        <div className="flex gap-1">
+        <div className="flex gap-1 shrink-0">
           {STEPS.map((step) => (
             <div
               key={step.num}
-              className={`h-2 w-6 rounded-full transition-colors ${
+              className={`h-1.5 w-4 rounded-full transition-colors ${
                 completedSteps.includes(step.num as WizardStep)
-                  ? "bg-primary"
+                  ? "bg-[#0f5238]"
                   : currentStep === step.num
-                    ? "bg-primary/60"
-                    : "bg-zinc-200 dark:bg-zinc-700"
+                    ? "bg-[#0f5238]/50"
+                    : "bg-[#e2e5dc]"
               }`}
               aria-hidden="true"
             />

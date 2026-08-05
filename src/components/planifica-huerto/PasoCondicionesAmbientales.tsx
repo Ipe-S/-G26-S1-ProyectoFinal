@@ -1,23 +1,68 @@
 "use client";
 
-import type { DatosPaso3, StepProps, ExposicionSolar, TipoRiego, Drenaje } from "@/types/huerto";
+import type { DatosPaso3, StepProps, Orientacion, TipoRiego } from "@/types/huerto";
+import OptionCard from "@/components/layout/optioncard";
 
-const EXPOSICIONES: { value: ExposicionSolar; label: string; horas: number; icon: string; desc: string }[] = [
-  { value: "sombra_parcial", label: "Sombra parcial", horas: 2, icon: "🌥️", desc: "Menos de 3 horas de sol directo" },
-  { value: "sol_medio", label: "Sol medio", horas: 4.5, icon: "⛅", desc: "Entre 3 y 6 horas de sol directo" },
-  { value: "sol_pleno", label: "Sol pleno", horas: 7, icon: "☀️", desc: "Más de 6 horas de sol directo" },
+// Cada orientación implica una exposición solar estimada.
+// Esto evita preguntarle al usuario "horas de sol" por separado (no está en el Figma),
+// y mantiene compatibilidad con PasoSeleccionCultivos / PasoPlanAccion, que ya
+// usan exposicionSolar y horasSolEstimadas para calcular compatibilidad de plantas.
+const EXPOSICION_POR_ORIENTACION: Record<
+  Orientacion,
+  { exposicionSolar: DatosPaso3["exposicionSolar"]; horas: number }
+> = {
+  norte: { exposicionSolar: "sol_pleno", horas: 7 },
+  oriente: { exposicionSolar: "sol_medio", horas: 4.5 },
+  poniente: { exposicionSolar: "sol_pleno", horas: 6 },
+  sur: { exposicionSolar: "sombra_parcial", horas: 2 },
+};
+
+const ORIENTACIONES: { value: Orientacion; label: string; image: string; desc: string }[] = [
+  {
+    value: "norte",
+    label: "Norte",
+    image: "/imagenes/iconos/norte.png",
+    desc: "Maximo sol (ideal para hortalizas)",
+  },
+  {
+    value: "oriente",
+    label: "Oriente",
+    image: "/imagenes/iconos/oriente.png",
+    desc: "Sol de mañana (suave y constante)",
+  },
+  {
+    value: "poniente",
+    label: "Poniente",
+    image: "/imagenes/iconos/poniente.png",
+    desc: "Sol tarde (intenso en verano)",
+  },
+  {
+    value: "sur",
+    label: "Sur",
+    image: "/imagenes/iconos/sur.png",
+    desc: "Menos sol directo (cultivos de sombra)",
+  },
 ];
 
-const TIPOS_RIEGO: { value: TipoRiego; label: string; icon: string; desc: string }[] = [
-  { value: "manual", label: "Manual", icon: "🚿", desc: "Regadera o manguera, riego a mano" },
-  { value: "goteo", label: "Goteo", icon: "💧", desc: "Sistema automatizado o asistido" },
-  { value: "secano", label: "Secano", icon: "🏜️", desc: "Sin riego adicional, solo lluvia" },
-];
-
-const DRENAJES: { value: Drenaje; label: string; icon: string; desc: string }[] = [
-  { value: "alto", label: "Alto", icon: "⬇️", desc: "El agua drena rápido, no se encharca" },
-  { value: "medio", label: "Medio", icon: "↕️", desc: "Retiene algo de humedad, drena normal" },
-  { value: "bajo", label: "Bajo", icon: "🌊", desc: "Se encharca fácilmente, tarda en drenar" },
+const TIPOS_RIEGO: { value: TipoRiego; label: string; image: string; desc: string }[] = [
+  {
+    value: "manual",
+    label: "Riego manual",
+    image: "/imagenes/iconos/manual.png",
+    desc: "Riego con manguera o manual",
+  },
+  {
+    value: "goteo",
+    label: "Riego automatico",
+    image: "/imagenes/iconos/automatico.svg",
+    desc: "Sistema automatizado de riego por goteo.",
+  },
+  {
+    value: "secano",
+    label: "Sin riego",
+    image: "/imagenes/iconos/sin-riego.svg",
+    desc: "Sin riego adicional, solo lluvia",
+  },
 ];
 
 export default function PasoCondicionesAmbientales({
@@ -26,129 +71,88 @@ export default function PasoCondicionesAmbientales({
   onNext,
   onBack,
 }: StepProps<DatosPaso3>) {
-  function handleExposicion(exp: ExposicionSolar) {
-    const horas = EXPOSICIONES.find((e) => e.value === exp)?.horas || null;
-    onUpdate({ exposicionSolar: exp, horasSolEstimadas: horas });
+  function handleOrientacion(ori: Orientacion) {
+    const { exposicionSolar, horas } = EXPOSICION_POR_ORIENTACION[ori];
+    onUpdate({ orientacion: ori, exposicionSolar, horasSolEstimadas: horas });
   }
 
   function canContinue() {
-    return data.exposicionSolar !== null && data.tipoRiego !== null && data.drenaje !== null;
+    return data.orientacion !== null && data.tipoRiego !== null;
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-          Paso 3: Condiciones Ambientales
+    <div className="flex flex-col items-start gap-8">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-[32px] font-semibold leading-10 tracking-[-0.96px] text-[#0F5238] font-serif">
+          Condiciones ambientales y riego
         </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Indica las condiciones de luz, riego y drenaje de tu espacio.
+        <p className="text-lg leading-7 text-[#404943]">
+          Cuéntanos un poco de la orientación y exposición del sol de tu
+          jardín. Esto nos ayuda a comprender las condiciones de tu terreno y
+          ofrecerte la recomendación adecuada a tus condiciones.
         </p>
       </div>
 
-      {/* Exposición Solar */}
-      <fieldset>
-        <legend className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">
-          Exposición solar diaria
+      {/* Orientación solar */}
+      <fieldset className="flex w-full flex-col gap-4">
+        <p className="text-lg text-[#404943]">
+          La orientación del sol nos indicara si tu suelo evapora rápido el
+          agua y su nivel de radiación solar.
+        </p>
+        <legend className="text-lg font-semibold text-[#0F5238]">
+          Seleccione orientación solar predominante de tu jardin.
         </legend>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {EXPOSICIONES.map((exp) => (
-            <button
-              key={exp.value}
-              type="button"
-              onClick={() => handleExposicion(exp.value)}
-              className={`flex flex-col items-center gap-2 rounded-xl border-2 p-5 text-center transition-all ${
-                data.exposicionSolar === exp.value
-                  ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                  : "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
-              }`}
-            >
-              <span className="text-3xl" aria-hidden="true">{exp.icon}</span>
-              <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">{exp.label}</span>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">{exp.desc}</span>
-            </button>
+        <div className="flex flex-wrap gap-6">
+          {ORIENTACIONES.map((ori) => (
+            <OptionCard
+              key={ori.value}
+              image={ori.image}
+              title={ori.label}
+              description={ori.desc}
+              selected={data.orientacion === ori.value}
+              onClick={() => handleOrientacion(ori.value)}
+              iconBackground
+            />
           ))}
         </div>
       </fieldset>
 
-      {/* Tipo de Riego */}
-      <fieldset>
-        <legend className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">
-          Disponibilidad y tipo de riego
+      {/* Tipo de riego */}
+      <fieldset className="flex w-full flex-col gap-4">
+        <legend className="text-lg font-semibold text-[#0F5238]">
+          Seleccione su tipo de riego
         </legend>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="flex flex-wrap gap-6">
           {TIPOS_RIEGO.map((riego) => (
-            <button
+            <OptionCard
               key={riego.value}
-              type="button"
+              image={riego.image}
+              title={riego.label}
+              description={riego.desc}
+              selected={data.tipoRiego === riego.value}
               onClick={() => onUpdate({ tipoRiego: riego.value })}
-              className={`flex flex-col items-center gap-2 rounded-xl border-2 p-5 text-center transition-all ${
-                data.tipoRiego === riego.value
-                  ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                  : "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
-              }`}
-            >
-              <span className="text-3xl" aria-hidden="true">{riego.icon}</span>
-              <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">{riego.label}</span>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">{riego.desc}</span>
-            </button>
+              iconBackground
+            />
           ))}
         </div>
       </fieldset>
-
-      {/* Drenaje */}
-      <fieldset>
-        <legend className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">
-          Drenaje del sustrato
-        </legend>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {DRENAJES.map((dren) => (
-            <button
-              key={dren.value}
-              type="button"
-              onClick={() => onUpdate({ drenaje: dren.value })}
-              className={`flex flex-col items-center gap-2 rounded-xl border-2 p-5 text-center transition-all ${
-                data.drenaje === dren.value
-                  ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                  : "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
-              }`}
-            >
-              <span className="text-3xl" aria-hidden="true">{dren.icon}</span>
-              <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">{dren.label}</span>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">{dren.desc}</span>
-            </button>
-          ))}
-        </div>
-      </fieldset>
-
-      {/* Resumen */}
-      {canContinue() && (
-        <div className="rounded-lg bg-green-50 border border-green-200 p-4 dark:bg-green-900/20 dark:border-green-800">
-          <p className="text-sm font-medium text-green-800 dark:text-green-300">
-            ✅ Condiciones definidas
-          </p>
-          <p className="mt-1 text-sm text-green-700 dark:text-green-400">
-            {data.horasSolEstimadas}h de sol · Riego {data.tipoRiego} · Drenaje {data.drenaje}
-          </p>
-        </div>
-      )}
 
       {/* Navegación */}
-      <div className="flex justify-between pt-4">
+      <div className="flex w-full justify-end gap-3 pt-2">
         <button
           type="button"
           onClick={onBack}
-          className="rounded-lg border border-zinc-300 px-6 py-3 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          className="rounded-full border border-[#BFC9C1] px-6 py-3 text-sm font-medium text-[#0F5238] transition-colors hover:bg-[#e8f5e9]"
         >
-          ← Anterior
+          Volver átras
         </button>
         <button
           type="button"
           onClick={onNext}
           disabled={!canContinue()}
-          className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 rounded-full bg-[#0F5238] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Siguiente →
+          Continuar al Paso 4 →
         </button>
       </div>
     </div>

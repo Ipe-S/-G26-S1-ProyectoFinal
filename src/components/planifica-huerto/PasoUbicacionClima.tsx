@@ -16,7 +16,6 @@ export default function PasoUbicacionClima({
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [error, setError] = useState("");
-  const [superficie, setSuperficie] = useState<string>(data.comuna ? "" : "");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -85,7 +84,7 @@ export default function PasoUbicacionClima({
   }
 
   function canContinue() {
-    return data.latitud !== null && data.longitud !== null;
+    return data.latitud !== null && data.longitud !== null && data.superficie !== null;
   }
 
   return (
@@ -215,8 +214,10 @@ export default function PasoUbicacionClima({
                 type="number"
                 min={1}
                 max={500}
-                value={superficie}
-                onChange={(e) => setSuperficie(e.target.value)}
+                value={data.superficie ?? ""}
+                onChange={(e) =>
+                  onUpdate({ superficie: e.target.value ? Number(e.target.value) : null })
+                }
                 placeholder="Ej. 45"
                 className="w-full rounded-lg border px-4 py-3 text-sm outline-none pr-12"
                 style={{ borderColor: "#BFC9C1", background: "#FFFFFF", color: "#191c1a" }}
