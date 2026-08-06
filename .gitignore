@@ -41,11 +41,3 @@ next-env.d.ts
 
 # === KIRO (configuración local del IDE) ===
 .kiro/
-
-# === ARCHIVOS DE DOCUMENTACIÓN / PRUEBAS LOCALES ===
-informe-proyecto.html
-pruebaUbicacion.html
-
-# === AGENTES IA (generados por el IDE) ===
-AGENTS.md
-CLAUDE.md
