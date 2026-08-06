@@ -154,31 +154,7 @@ export default function PasoUbicacionClima({
                 )}
               </div>
               {/* Botón geolocalización */}
-              <button
-                type="button"
-                className="flex items-center justify-center w-12 h-12 rounded-lg border"
-                style={{ borderColor: "#BFC9C1", background: "#FFFFFF" }}
-                title="Usar mi ubicación actual"
-                onClick={() => {
-                  if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition((pos) => {
-                      const zona = estimarZonaClimatica(pos.coords.latitude);
-                      onUpdate({
-                        latitud: pos.coords.latitude,
-                        longitud: pos.coords.longitude,
-                        zonaClimatica: zona,
-                        riesgoHeladas: pos.coords.latitude < -35,
-                        modoIngreso: "api",
-                        direccion: "Mi ubicación actual",
-                        comuna: "Detectada",
-                      });
-                      setQuery("Mi ubicación actual");
-                    });
-                  }
-                }}
-              >
-                <span className="text-lg">◎</span>
-              </button>
+
             </div>
 
             {/* Dropdown resultados */}

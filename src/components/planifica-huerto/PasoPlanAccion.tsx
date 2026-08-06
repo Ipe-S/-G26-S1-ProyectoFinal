@@ -42,7 +42,7 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
             <h3 className="text-lg font-semibold text-[#0F5238]">Resumen de tu espacio</h3>
           </div>
           <div className="grid grid-cols-2 gap-6 pt-6 text-sm">
-            <InfoItem label="Ubicación" value={data.paso1.comuna || data.paso1.direccion} />
+            <InfoItem label="Ubicación" value={data.paso1.direccion+", "+data.paso1.comuna} />
             <InfoItem label="Superficie" value={data.paso1.superficie ? `${data.paso1.superficie} m²` : "—"} />
             <InfoItem label="Tipo de suelo" value={data.paso2.tipoSuelo || "—"} />
             <InfoItem label="Orientación del sol" value={data.paso3.orientacion || "—"} />

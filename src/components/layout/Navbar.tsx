@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -41,9 +42,13 @@ export default function Navbar() {
     <header className={styles.headerContainer}>
       {/* Logo */}
       <Link href="/" onClick={() => setIsOpen(false)}>
-        <span className={styles.navLink} style={{ fontSize: "1.25rem", fontWeight: 700 }}>
-          🌿 {process.env.NEXT_PUBLIC_NOMBRE_PROYECTO || "Küme Rayentwe"}
-        </span>
+        <Image
+          src="/imagenes/logo.svg"
+          alt="Logo"
+          width={120}
+          height={40}
+          priority
+        />
       </Link>
 
       {/* Desktop nav */}
