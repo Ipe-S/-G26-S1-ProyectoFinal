@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import type { HuertoWizardData } from "@/types/huerto";
+import type { GardeningInsights } from "@/types/weather";
 import { CROPS_CATALOG } from "@/data/crops";
 
 interface PasoPlanAccionProps {
@@ -9,7 +11,22 @@ interface PasoPlanAccionProps {
   onReset: () => void;
 }
 
+interface WeatherApiResponse {
+  success: boolean;
+  data?: {
+    gardeningInsights: GardeningInsights;
+    current: {
+      temperature: number;
+      humidity: number;
+      weatherDescription: string;
+    };
+  };
+}
+
 export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccionProps) {
+  const [weatherInsights, setWeatherInsights] = useState<WeatherApiResponse | null>(null);
+  const [loadingWeather, setLoadingWeather] = useState(true);
+
   const cultivosDetalle = data.paso4.cultivosSeleccionados.map((sel) => {
     const crop = CROPS_CATALOG.find((c) => c.id === sel.id);
     return { ...sel, crop };
@@ -17,6 +34,25 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
 
   const mesActual = new Date().getMonth(); // 0-11
   const MESES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+  // Consultar API Forecast con las coordenadas del Paso 1
+  useEffect(() => {
+    async function fetchWeather() {
+      setLoadingWeather(true);
+      try {
+        const lat = data.paso1.latitud || -33.6117;
+        const lon = data.paso1.longitud || -70.5758;
+        const res = await fetch(`/api/weather?lat=${lat}&lon=${lon}&days=7`);
+        const json = await res.json();
+        setWeatherInsights(json);
+      } catch {
+        setWeatherInsights(null);
+      } finally {
+        setLoadingWeather(false);
+      }
+    }
+    fetchWeather();
+  }, [data.paso1.latitud, data.paso1.longitud]);
 
   function handleDescargar() {
     window.print();
@@ -193,21 +229,77 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
         </div>
       </section>
 
-      {/* Recomendaciones */}
+      {/* Recomendaciones Climáticas desde Open-Meteo Forecast API */}
       <section className="w-full rounded-[32px] bg-white p-6 shadow-[0px_20px_20px_rgba(15,82,56,0.06)]">
         <div className="flex items-center gap-2 border-b border-[#C6C6C8] pb-4">
           <img src="/imagenes/iconos/Light-bulb.svg" alt="" className="h-4 w-4" />
-          <h3 className="text-lg font-semibold text-[#0F5238]">Recomendaciones</h3>
+          <h3 className="text-lg font-semibold text-[#0F5238]">Recomendaciones </h3>
+          <span className="ml-auto text-xs text-[#404943]/60">Datos en tiempo real</span>
         </div>
-        <ul className="flex flex-col gap-3 pt-4 text-sm text-[#404943]">
+
+        {loadingWeather ? (
+          <div className="flex items-center justify-center py-8">
+            <div className="h-6 w-6 animate-spin rounded-full border-3 border-zinc-200 border-t-[#0F5238]" />
+            <span className="ml-3 text-sm text-[#404943]">Consultando clima actual...</span>
+          </div>
+        ) : weatherInsights?.data ? (
+          <div className="flex flex-col gap-4 pt-4">
+            {/* Badges de estado */}
+            <div className="flex flex-wrap gap-2">
+              <StatusBadge
+                active={weatherInsights.data.gardeningInsights.goodForPlanting}
+                label="Apto para sembrar"
+                activeColor="bg-[#D7E5BB] text-[#5A6745]"
+              />
+              <StatusBadge
+                active={weatherInsights.data.gardeningInsights.frostRisk}
+                label="Riesgo de helada"
+                activeColor="bg-red-100 text-red-800"
+              />
+              <StatusBadge
+                active={weatherInsights.data.gardeningInsights.needsWatering}
+                label="Necesita riego"
+                activeColor="bg-blue-100 text-blue-800"
+              />
+            </div>
+
+            {/* Clima actual */}
+            <div className="rounded-xl bg-[#F5F3EE] p-4">
+              <p className="text-sm text-[#404943]">
+                <strong className="text-[#0F5238]">{weatherInsights.data.current.weatherDescription}</strong>
+                {" · "}{weatherInsights.data.current.temperature}°C · Humedad: {weatherInsights.data.current.humidity}%
+              </p>
+            </div>
+
+            {/* Resumen */}
+            <p className="text-sm font-medium text-[#0F5238]">
+              {weatherInsights.data.gardeningInsights.summary}
+            </p>
+
+            {/* Lista de recomendaciones de la API */}
+            <ul className="flex flex-col gap-2">
+              {weatherInsights.data.gardeningInsights.recommendations.map((rec, i) => (
+                <li key={i} className="rounded-xl bg-[#F5F3EE] px-4 py-3 text-sm text-[#404943]">
+                  {rec}
+                </li>
+              ))}
           {generarRecomendaciones(data, cultivosDetalle).map((rec, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#0F5238]" />
-              <span>{rec.text}</span>
+            <li key={i} className="flex flex-col gap-2">
+              <span className="rounded-xl bg-[#F5F3EE] px-4 py-3 text-sm text-[#404943]">  {rec.text}</span>
             </li>
           ))}
         </ul>
+          </div>
+        ) : (
+          <div className="pt-4">
+            <p className="text-sm text-[#404943]">
+              No se pudieron obtener datos climáticos en tiempo real. Las recomendaciones se basan en la zona climática seleccionada.
+            </p>
+          </div>
+        )}
       </section>
+
+
 
       {/* Acciones */}
       <div className="no-print flex w-full flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
@@ -263,6 +355,30 @@ function Badge({ children }: { children: React.ReactNode }) {
   return (
     <span className="rounded bg-[#F5F3EE] px-4 py-1 text-sm font-semibold tracking-[0.7px] text-[#404943]">
       {children}
+    </span>
+  );
+}
+
+function StatusBadge({
+  active,
+  label,
+  activeColor,
+}: {
+  active: boolean;
+  label: string;
+  activeColor: string;
+}) {
+  return (
+    <span
+      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
+        active ? activeColor : "bg-zinc-100 text-zinc-400"
+      }`}
+    >
+      <span
+        className={`mr-1.5 h-2 w-2 rounded-full ${active ? "bg-current" : "bg-zinc-300"}`}
+        aria-hidden="true"
+      />
+      {label}
     </span>
   );
 }

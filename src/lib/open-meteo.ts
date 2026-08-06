@@ -190,43 +190,43 @@ function generateGardeningInsights(
 
   if (frostRisk) {
     recommendations.push(
-      "⚠️ Riesgo de helada en los próximos días. Protege tus plantas con cobertura o tráelas al interior."
+      "Riesgo de helada en los próximos días. Protege tus plantas con cobertura o tráelas al interior."
     );
   }
 
   if (needsWatering) {
     recommendations.push(
-      "💧 Se espera alta evapotranspiración y poca lluvia. Riega tus plantas temprano en la mañana o al atardecer."
+      "Se espera alta evapotranspiración y poca lluvia. Riega tus plantas temprano en la mañana o al atardecer."
     );
   }
 
   if (goodForPlanting) {
     recommendations.push(
-      "🌱 Las condiciones actuales son favorables para sembrar. Aprovecha para trasplantar o iniciar nuevos cultivos."
+      "Las condiciones actuales son favorables para sembrar. Aprovecha para trasplantar o iniciar nuevos cultivos."
     );
   }
 
   if (tomorrow && tomorrow.uvIndexMax > 8) {
     recommendations.push(
-      "☀️ Índice UV alto mañana. Considera malla sombra para cultivos sensibles como lechugas y espinacas."
+      "Índice UV alto mañana. Considera malla sombra para cultivos sensibles como lechugas y espinacas."
     );
   }
 
   if (tomorrow && tomorrow.windSpeedMax > 40) {
     recommendations.push(
-      "🌬️ Vientos fuertes previstos. Asegura tutores y estructuras de soporte en tu huerto."
+      "Vientos fuertes previstos. Asegura tutores y estructuras de soporte en tu huerto."
     );
   }
 
   if (tomorrow && tomorrow.precipitationProbability > 70) {
     recommendations.push(
-      "🌧️ Alta probabilidad de lluvia. No es necesario regar. Verifica el drenaje de tus macetas."
+      "Alta probabilidad de lluvia. No es necesario regar. Verifica el drenaje de tus macetas."
     );
   }
 
   if (recommendations.length === 0) {
     recommendations.push(
-      "✅ Condiciones climáticas estables. Mantén tu rutina habitual de riego y cuidado."
+      "Condiciones climáticas estables. Mantén tu rutina habitual de riego y cuidado."
     );
   }
 
