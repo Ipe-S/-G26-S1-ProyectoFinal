@@ -82,6 +82,13 @@ export default function PasoCondicionesAmbientales({
 
   return (
     <div className="flex flex-col items-start gap-8">
+        {/* Badge paso */}
+        <div className="inline-flex items-center px-4 py-1 gap-2 rounded-full mb-8" style={{ background: "#D7E5BB" }}>
+        <span className="w-3 h-3 rounded-full" style={{ background: "#5A6745" }} aria-hidden="true" />
+        <span className="font-semibold text-sm uppercase tracking-wide" style={{ color: "#5A6745" }}>
+          Paso 3
+        </span>
+      </div>
       <div className="flex flex-col gap-2">
         <h2 className="text-[32px] font-semibold leading-10 tracking-[-0.96px] text-[#0F5238] font-serif">
           Condiciones ambientales y riego

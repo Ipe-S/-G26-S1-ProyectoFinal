@@ -94,7 +94,7 @@ export default function PasoUbicacionClima({
       <div className="inline-flex items-center px-4 py-1 gap-2 rounded-full mb-8" style={{ background: "#D7E5BB" }}>
         <span className="w-3 h-3 rounded-full" style={{ background: "#5A6745" }} aria-hidden="true" />
         <span className="font-semibold text-sm uppercase tracking-wide" style={{ color: "#5A6745" }}>
-          Paso 1 de 5
+          Paso 1
         </span>
       </div>
 
@@ -114,16 +114,6 @@ export default function PasoUbicacionClima({
             recomendaciones de plantas debemos conocer las condiciones de tu suelo.
           </p>
 
-          {/* Tip card */}
-          <div
-            className="flex items-start gap-3 rounded-xl p-4 mt-4"
-            style={{ background: "#F5F3EE", border: "1px solid rgba(191,201,193,0.3)" }}
-          >
-            <span className="text-lg mt-0.5" aria-hidden="true"></span>
-            <p className="text-sm leading-snug" style={{ color: "#404943" }}>
-              Tip: Toma la foto durante la &quot;hora dorada&quot; para identificar mejor las zonas de sombra.
-            </p>
-          </div>
         </div>
 
         {/* Columna derecha: Formulario card */}
