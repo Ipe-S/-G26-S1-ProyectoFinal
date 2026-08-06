@@ -124,8 +124,8 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
                               className="inline-flex items-center gap-1 rounded bg-[#D7E5BB] px-2 py-1 text-[10px] font-semibold text-[#404943]"
                               title="Siembra"
                             >
-                              <img src="/imagenes/iconos/siembra.svg" alt="" className="h-3 w-3" />
-                              S
+                              <img src="/imagenes/iconos/siembra.svg" alt="" className="h-8 w-8" />
+                              
                             </span>
                           )}
                           {esCosecha && !esSiembra && (
@@ -133,8 +133,8 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
                               className="inline-flex items-center gap-1 rounded bg-[#FFF4D2] px-2 py-1 text-[10px] font-semibold text-[#404943]"
                               title="Cosecha"
                             >
-                              <img src="/imagenes/iconos/cosecha.svg" alt="" className="h-3 w-3" />
-                              C
+                              <img src="/imagenes/iconos/cosecha.svg" alt="" className="h-8 w-8" />
+                              
                             </span>
                           )}
                         </td>
@@ -196,7 +196,7 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
       {/* Recomendaciones */}
       <section className="w-full rounded-[32px] bg-white p-6 shadow-[0px_20px_20px_rgba(15,82,56,0.06)]">
         <div className="flex items-center gap-2 border-b border-[#C6C6C8] pb-4">
-          <img src="/imagenes/iconos/Light_bulb.svg" alt="" className="h-4 w-4" />
+          <img src="/imagenes/iconos/Light-bulb.svg" alt="" className="h-4 w-4" />
           <h3 className="text-lg font-semibold text-[#0F5238]">Recomendaciones</h3>
         </div>
         <ul className="flex flex-col gap-3 pt-4 text-sm text-[#404943]">

@@ -14,10 +14,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const NOMBRE_PROYECTO = process.env.NEXT_PUBLIC_NOMBRE_PROYECTO || "Mi Huerto";
+const DESCRIPCION_BASE =
+  "Aplicación ciudadana para incentivar y gestionar proyectos de huertos sustentables.";
+
 export const metadata: Metadata = {
-  title: `${process.env.NEXT_PUBLIC_NOMBRE_PROYECTO || "Mi Huerto"} — Huerto Sustentable`,
-  description:
-    "Aplicación ciudadana para incentivar y gestionar proyectos de huertos sustentables.",
+  title: {
+    default: `${NOMBRE_PROYECTO} — Huerto Sustentable`,
+    template: `%s | ${NOMBRE_PROYECTO}`,
+  },
+  description: DESCRIPCION_BASE,
+  openGraph: {
+    title: `${NOMBRE_PROYECTO} — Huerto Sustentable`,
+    description: DESCRIPCION_BASE,
+    type: "website",
+    locale: "es_CL",
+    siteName: NOMBRE_PROYECTO,
+  },
 };
 
 export default function RootLayout({
