@@ -1,8 +1,9 @@
 # Proyecto Mi huerto
-Es un sistema web que sirve para planificar un huerto de acuerdo a las condiciones del suelo, espacio y plantas que el usuario seleccione.
-el sistema analiza el suelo, condiciones climáticas como exposición solar y forma de riego, y con esos datos calcula y te ofrece una lista de vegetales y hortalizas que puedes sembrar de acuerdo a tu tipo de suelo. Al final te ofrece un plan de siembra con un calendario de siembra y cosecha y recomendaciones para la siembra.
-Dirigido a todo tipo de usuario que quiera tener un huerto en su casa, o departamento. El objetivo es incentivar la sustentabilidad alimentaria y mejorar la salud a través de que las personas 
+Un sistema inteligente para planificar tu huerto en casa.
 
+Nuestra plataforma web analiza las condiciones de tu suelo, el nivel de luz solar y el tipo de riego disponible para decirte exactamente qué y cómo cultivar. A partir de estos datos, genera una lista optimizada de verduras y hortalizas, junto con un calendario personalizado de siembra, cosecha y cuidados.
+
+Diseñada para cualquier tipo de espacio —desde un jardín hasta el balcón de un departamento—, nuestro objetivo es impulsar la sustentabilidad alimentaria y la alimentación saludable, permitiendo que todos puedan cultivar sus propios alimentos orgánicos y libres de químicos desde cero.
 ### Características del proyecto:
 
 - Proyecto solicita al cliente loguearse para poder generar el plan, no tiene ningun costo para el usuario mas que su correo.
