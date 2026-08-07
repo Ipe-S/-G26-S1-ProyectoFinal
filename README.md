@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Proyecto Mi huerto
+Es un sistema web que sirve para planificar un huerto de acuerdo a las condiciones del suelo, espacio y plantas que el usuario seleccione.
+el sistema analiza el suelo, condiciones climáticas como exposición solar y forma de riego, y con esos datos calcula y te ofrece una lista de vegetales y hortalizas que puedes sembrar de acuerdo a tu tipo de suelo. Al final te ofrece un plan de siembra con un calendario de siembra y cosecha y recomendaciones para la siembra.
+Dirigido a todo tipo de usuario que quiera tener un huerto en su casa, o departamento. El objetivo es incentivar la sustentabilidad alimentaria y mejorar la salud a través de que las personas 
 
-## Getting Started
+### Características del proyecto:
 
-First, run the development server:
+- Proyecto solicita al cliente loguearse para poder generar el plan, no tiene ningun costo para el usuario mas que su correo.
+- Se realizo una database o base con la lógica de negocio y cálculos con los datos ingresados por el usuario en el formulario, a fin de entregar una recomendación siembra segun condiciones ambientales y de suelo.
+- APIs que están interactuando con el sistema:
+   1.	Open-Meteo Forecast	https://api.open-meteo.com/v1/forecast: nos da las recomendaciones según el clima: temperatura, humedad, lluvia, UV, suelo, evapotranspiración. Api gratis sin API Key.
+   2.	Open-Meteo Geocoding, es la Api publica sin api key se utiliza para obtener los datos de la ubicación ingresada por el usuario en el primer paso del formulario. https://geocoding-api.open-meteo.com/v1/search	
+   3.	Api Supabase	https://jkwhzkpbhwaxewdhpswy.supabase.co, en una api privada que requiere URL + key en .env.local. Se esta utilizando para el login y registro de usuarios.
+      
+### Tecnologias utilizadas:
+- React
+- Next.js
+- Typescript
+- Tailwind
+- Vercel
+- Github
+- Git
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Despliegue en Vercel
+https://g26-s1-proyecto-final-silk.vercel.app/
