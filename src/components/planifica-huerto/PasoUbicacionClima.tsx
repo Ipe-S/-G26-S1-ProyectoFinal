@@ -88,7 +88,7 @@ export default function PasoUbicacionClima({
   }
 
   return (
-    <div className="w-full max-w-[1100px] mx-auto px-4 py-8">
+    <div className="bg-white w-full max-w-[1100px] mx-auto px-4 py-8">
 
       {/* Badge paso */}
       <div className="inline-flex items-center px-4 py-1 gap-2 rounded-full mb-8" style={{ background: "#D7E5BB" }}>

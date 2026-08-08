@@ -309,7 +309,7 @@ export default function PasoPlanAccion({ data, onBack, onReset }: PasoPlanAccion
 
 
       {/* Acciones */}
-      <div className="no-print flex w-full flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
+      <div className="no-print flex w-full flex-col gap-3 pt-2 sm:flex-row sm:justify-end"> 
         <button
           type="button"
           onClick={onBack}

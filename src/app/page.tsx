@@ -4,9 +4,9 @@ import MiHuerto from "@/components/planifica-huerto/ContenedorWizardHuerto";
 
 export default function Home() {
   return (
-    <main className="w-full min-h-screen bg-white">
+    <div className="w-full bg-[var(--color-fondo)]">
       {/* ---------- HERO SECTION ---------- */}
-      <section className="relative w-full h-[170px] md:h-[300px] overflow-hidden flex items-center justify-center">
+      <section className="relative w-full h-[140px] md:h-[240px] overflow-hidden flex items-center justify-center">
         {/* Imagen de fondo optimizada con Next.js Image */}
         <Image
           src="/imagenes/HeroCarouselSection.png"
@@ -25,11 +25,13 @@ export default function Home() {
         </div>
       </section>
       {/* ---------- INFO SECTION ---------- */}
-      <section className="bg-white py-12 px-6 flex justify-center">
-        <div className="flex flex-col lg:flex-row gap-10 max-w-[60%] w-full items-center">
+   
+  
+      <section className="bg-[var(--color-fondo)] py-12 px-6 flex justify-center">
+        <div className="flex flex-col lg:flex-row gap-10 max-w-[75%] w-full items-center">
           {/* Card de Imagen con Badge */}
           <div className="relative w-full lg:flex-1">
-            <div className="relative w-full h-[250px] sm:h-[400px]">
+            <div className="relative w-full h-[220px] sm:h-[400px]">
               <Image
                 src="/imagenes/huerto.svg"
                 alt="Sensor de suelo inteligente en maceta"
@@ -44,7 +46,7 @@ export default function Home() {
             <h2 className="text-2xl text-[#0f5238] font-normal">
               Diseña tu huerto según tu suelo y clima
             </h2>
-            <p className="text-base text-[#404943] font-semibold leading-relaxed">
+            <p className="text-base text-[#404943] font-regular leading-relaxed">
               Ingresa los datos de tu terreno, plantas de verduras y hortalizas deseadas. Nuestro
               sistema analizará la tierra y el clima local para entregarte
               recomendaciones de siembra exactas de acuerdo a un calendario.
@@ -102,7 +104,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

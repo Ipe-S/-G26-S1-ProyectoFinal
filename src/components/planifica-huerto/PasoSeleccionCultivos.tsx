@@ -230,31 +230,18 @@ export default function PasoSeleccionCultivos({
         <button
           type="button"
           onClick={onBack}
-          className="rounded-full border-2 border-[#BFC9C1] px-12 py-3 text-base font-normal text-[#0F5238] transition-colors hover:bg-[#F4F6F5]"
-        >
+          className="rounded-full border border-[#BFC9C1] px-6 py-3 text-sm font-medium text-[#0F5238] transition-colors hover:bg-[#e8f5e9]"
+         >
           Volver atrás
         </button>
         <button
           type="button"
           onClick={onNext}
           disabled={!canContinue}
-          className="flex items-center gap-3 rounded-full bg-[#0F5238] px-8 py-3 text-base font-normal text-white transition-colors hover:bg-[#0a3d2a] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 rounded-full bg-[#0F5238] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Generar mi plan
-          <svg
-            className="size-4 shrink-0"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 12h14M12 5l7 7-7 7"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          
         </button>
       </div>
     </div>
