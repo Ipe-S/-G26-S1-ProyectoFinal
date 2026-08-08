@@ -1,9 +1,16 @@
 # Proyecto Mi huerto
 Un sistema inteligente para planificar tu huerto en casa.
 
+### Participantes:
+##### - Felipe Saldiax 
+
+##### - Ligia Cautela
+
+### Detalle del proyecto:
 Nuestra plataforma web analiza las condiciones de tu suelo, el nivel de luz solar y el tipo de riego disponible para decirte exactamente qué y cómo cultivar. A partir de estos datos, genera una lista optimizada de verduras y hortalizas, junto con un calendario personalizado de siembra, cosecha y cuidados.
 
 Diseñada para cualquier tipo de espacio —desde un jardín hasta el balcón de un departamento—, nuestro objetivo es impulsar la sustentabilidad alimentaria y la alimentación saludable, permitiendo que todos puedan cultivar sus propios alimentos orgánicos y libres de químicos desde cero.
+
 ### Características del proyecto:
 
 - Proyecto solicita al cliente loguearse para poder generar el plan, no tiene ningun costo para el usuario mas que su correo.
