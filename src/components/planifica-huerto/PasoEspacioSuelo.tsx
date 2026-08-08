@@ -89,14 +89,14 @@ export default function PasoEspacioSuelo({
       </div>
 
       {/* Tipo de Suelo */}
-      <fieldset className="flex w-full flex-col gap-4">
+      <fieldset className="flex w-full flex-col gap-4 ">
         <div className="gap-4"> 
-          <legend className="text-lg font-semibold text-[#0F5238]">
+          <legend className="text-lg font-semibold text-[#0F5238] text-center ">
           Seleccione su tipo de suelo
         </legend>
         </div>
        
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-wrap gap-6 justify-center">
           {TIPOS_SUELO.map((tipo) => (
             <OptionCard
               key={tipo.value}
@@ -116,10 +116,10 @@ export default function PasoEspacioSuelo({
           ¿Cómo se comporta el agua después de regar o llover en tu zona de
           cultivo? Selecciona la opción que se adecue más.
         </p>
-        <legend className="text-lg font-semibold text-[#0F5238]">
+        <legend className="text-lg font-semibold text-[#0F5238] text-centers">
           Seleccione su drenaje
         </legend>
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-wrap gap-6 justify-center">
           {DRENAJES.map((dren) => (
             <OptionCard
               key={dren.value}

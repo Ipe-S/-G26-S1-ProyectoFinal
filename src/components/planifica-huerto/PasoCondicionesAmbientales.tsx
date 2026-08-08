@@ -90,7 +90,7 @@ export default function PasoCondicionesAmbientales({
         </span>
       </div>
       <div className="flex flex-col gap-2">
-        <h2 className="text-[32px] font-semibold leading-10 tracking-[-0.96px] text-[#0F5238] font-serif">
+        <h2 className="text-[32px] font-semibold leading-10 tracking-[-0.96px] text-[#0F5238] font-serif ">
           Condiciones ambientales y riego
         </h2>
         <p className="text-lg leading-7 text-[#404943]">
@@ -106,10 +106,10 @@ export default function PasoCondicionesAmbientales({
           La orientación del sol nos indicara si tu suelo evapora rápido el
           agua y su nivel de radiación solar.
         </p>
-        <legend className="text-lg font-semibold text-[#0F5238]">
+        <legend className="text-lg font-semibold text-[#0F5238] text-center">
           Seleccione orientación solar predominante de tu jardin.
         </legend>
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-wrap gap-6 justify-center">
           {ORIENTACIONES.map((ori) => (
             <OptionCard
               key={ori.value}
@@ -126,10 +126,10 @@ export default function PasoCondicionesAmbientales({
 
       {/* Tipo de riego */}
       <fieldset className="flex w-full flex-col gap-4">
-        <legend className="text-lg font-semibold text-[#0F5238]">
+        <legend className="text-lg font-semibold text-[#0F5238] text-center">
           Seleccione su tipo de riego
         </legend>
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-wrap gap-6 justify-center">
           {TIPOS_RIEGO.map((riego) => (
             <OptionCard
               key={riego.value}
